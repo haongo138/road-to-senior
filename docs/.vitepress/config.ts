@@ -174,7 +174,35 @@ export default withMermaid({
           text: 'Behavioral',
           items: [
             { text: 'Overview', link: '/behavioral/' },
-            { text: 'STAR Method', link: '/behavioral/star-method' },
+            { text: 'STAR-L Method', link: '/behavioral/star-method' },
+          ],
+        },
+        {
+          text: 'Questions · Core',
+          items: [
+            { text: 'Conflict with a Teammate', link: '/behavioral/conflict-with-teammate' },
+            { text: 'Hardest Technical Problem', link: '/behavioral/hardest-technical-problem' },
+            { text: 'A Failure or Mistake', link: '/behavioral/failure-or-mistake' },
+            { text: 'Disagreed with Your Manager', link: '/behavioral/disagreed-with-manager' },
+            { text: 'Led a Project', link: '/behavioral/led-a-project' },
+          ],
+        },
+        {
+          text: 'Questions · Influence & Collaboration',
+          collapsed: true,
+          items: [
+            { text: 'Influencing Without Authority', link: '/behavioral/influence-without-authority' },
+            { text: 'Difficult Feedback', link: '/behavioral/difficult-feedback' },
+            { text: 'Mentoring Someone', link: '/behavioral/mentoring' },
+          ],
+        },
+        {
+          text: 'Questions · Execution & Ownership',
+          collapsed: true,
+          items: [
+            { text: 'Tight Deadline / Priorities', link: '/behavioral/tight-deadline-priorities' },
+            { text: 'Owned an Ambiguous Problem', link: '/behavioral/ambiguous-ownership' },
+            { text: 'Production Incident / Outage', link: '/behavioral/production-incident' },
           ],
         },
       ],
