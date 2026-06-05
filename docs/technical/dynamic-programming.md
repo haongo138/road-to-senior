@@ -16,28 +16,40 @@ status: draft
 
 | | Top-down (Memoization) | Bottom-up (Tabulation) |
 |---|---|---|
-| Style | Recursive + cache dict | Iterative + dp array/table |
+| Style | Recursive + cache map | Iterative + dp slice/table |
 | Order | Natural (call what you need) | Must determine fill order |
 | Space | Call stack overhead | Often easier to optimize |
 
 **Pattern / template**
 
-```python
-# Top-down memoization
-from functools import lru_cache
+```go
+// Top-down memoization
+var memo = map[[2]int]int{}
 
-@lru_cache(maxsize=None)
-def dp(i, j):
-    # base case
-    if i == 0: return BASE
-    # recurrence relation
-    return best(dp(i-1, j), dp(i, j-1), ...)
+func dp(i, j int) int {
+    if i == 0 { return BASE }          // base case
+    if v, ok := memo[[2]int{i, j}]; ok {
+        return v
+    }
+    // recurrence relation
+    result := max(dp(i-1, j), dp(i, j-1))
+    memo[[2]int{i, j}] = result
+    return result
+}
 
-# Bottom-up tabulation
-dp = [[0] * (n+1) for _ in range(m+1)]
-for i in range(1, m+1):
-    for j in range(1, n+1):
-        dp[i][j] = recurrence(dp[i-1][j], dp[i][j-1], ...)
+// Bottom-up tabulation
+func dpTable(m, n int) int {
+    table := make([][]int, m+1)
+    for i := range table {
+        table[i] = make([]int, n+1)
+    }
+    for i := 1; i <= m; i++ {
+        for j := 1; j <= n; j++ {
+            table[i][j] = max(table[i-1][j], table[i][j-1])
+        }
+    }
+    return table[m][n]
+}
 ```
 
 **Complexity**

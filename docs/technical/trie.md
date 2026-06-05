@@ -16,47 +16,60 @@ I like this one a lot.
 
 **Pattern / template**
 
-```python
-class TrieNode:
-    def __init__(self):
-        self.children = {}   # char -> TrieNode
-        self.is_end = False  # marks end of a complete word
+```go
+type TrieNode struct {
+	children map[rune]*TrieNode
+	isEnd    bool // marks end of a complete word
+}
 
-class Trie:
-    def __init__(self):
-        self.root = TrieNode()
+func newTrieNode() *TrieNode {
+	return &TrieNode{children: map[rune]*TrieNode{}}
+}
 
-    def insert(self, word: str) -> None:
-        node = self.root
-        for ch in word:
-            if ch not in node.children:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.is_end = True
+type Trie struct{ root *TrieNode }
 
-    def search(self, word: str) -> bool:
-        node = self.root
-        for ch in word:
-            if ch not in node.children:
-                return False
-            node = node.children[ch]
-        return node.is_end
+func NewTrie() *Trie { return &Trie{root: newTrieNode()} }
 
-    def starts_with(self, prefix: str) -> bool:
-        node = self.root
-        for ch in prefix:
-            if ch not in node.children:
-                return False
-            node = node.children[ch]
-        return True
+func (t *Trie) Insert(word string) {
+	node := t.root
+	for _, ch := range word {
+		if node.children[ch] == nil {
+			node.children[ch] = newTrieNode()
+		}
+		node = node.children[ch]
+	}
+	node.isEnd = true
+}
+
+func (t *Trie) Search(word string) bool {
+	node := t.root
+	for _, ch := range word {
+		if node.children[ch] == nil {
+			return false
+		}
+		node = node.children[ch]
+	}
+	return node.isEnd
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+	node := t.root
+	for _, ch := range prefix {
+		if node.children[ch] == nil {
+			return false
+		}
+		node = node.children[ch]
+	}
+	return true
+}
 ```
 
 **Complexity**
 - Insert / search / prefix check: O(m) where m = word/prefix length.
-- Space: O(ALPHABET_SIZE × total_characters) — can be large; consider a dict-based node (as above) for sparse alphabets.
+- Space: O(ALPHABET_SIZE × total_characters) — can be large; consider a map-based node (as above) for sparse alphabets.
 
 **Pitfalls**
-- Using an array of 26 children instead of a dict wastes memory for non-lowercase-only inputs.
+- Using `[26]*TrieNode` instead of `map[rune]*TrieNode` wastes memory for non-lowercase-only inputs.
 - `search` and `starts_with` differ only in the final `is_end` check — easy to confuse.
 - Deleting from a trie requires backtracking to prune empty branches; it is non-trivial.
 

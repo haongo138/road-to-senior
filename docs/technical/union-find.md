@@ -14,31 +14,48 @@ status: draft
 
 **Pattern / template**
 
-```python
-class UnionFind:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.rank   = [0] * n
+```go
+type UnionFind struct {
+	parent []int
+	rank   []int
+}
 
-    def find(self, x):
-        if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])  # path compression
-        return self.parent[x]
+func NewUnionFind(n int) *UnionFind {
+	parent := make([]int, n)
+	for i := range parent {
+		parent[i] = i
+	}
+	return &UnionFind{parent: parent, rank: make([]int, n)}
+}
 
-    def union(self, x, y) -> bool:
-        px, py = self.find(x), self.find(y)
-        if px == py:
-            return False  # already connected (cycle detected)
-        # union by rank
-        if self.rank[px] < self.rank[py]:
-            px, py = py, px
-        self.parent[py] = px
-        if self.rank[px] == self.rank[py]:
-            self.rank[px] += 1
-        return True
+func (uf *UnionFind) Find(x int) int {
+	if uf.parent[x] != x {
+		uf.parent[x] = uf.Find(uf.parent[x]) // path compression
+	}
+	return uf.parent[x]
+}
 
-    def connected(self, x, y) -> bool:
-        return self.find(x) == self.find(y)
+// Union merges the sets containing x and y.
+// Returns false if already connected (cycle detected).
+func (uf *UnionFind) Union(x, y int) bool {
+	px, py := uf.Find(x), uf.Find(y)
+	if px == py {
+		return false // already connected
+	}
+	// union by rank
+	if uf.rank[px] < uf.rank[py] {
+		px, py = py, px
+	}
+	uf.parent[py] = px
+	if uf.rank[px] == uf.rank[py] {
+		uf.rank[px]++
+	}
+	return true
+}
+
+func (uf *UnionFind) Connected(x, y int) bool {
+	return uf.Find(x) == uf.Find(y)
+}
 ```
 
 **Complexity**
@@ -47,7 +64,7 @@ class UnionFind:
 
 **Pitfalls**
 - Forgetting path compression means `find` degrades to O(n) for skewed trees.
-- `union` should return `False` (not crash) when the two nodes are already in the same set — this is how you detect cycles.
+- `Union` should return `false` (not crash) when the two nodes are already in the same set — this is how you detect cycles.
 - DSU only handles *undirected* connectivity; for directed reachability, use DFS/BFS instead.
 
 ## Common follow-ups

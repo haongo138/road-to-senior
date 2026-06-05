@@ -19,47 +19,72 @@ status: draft
 
 ## Pattern / template
 
-```python
-# Dummy head (simplifies insert/remove at head)
-dummy = ListNode(0)
-dummy.next = head
+```go
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
 
-# In-place reversal
-prev, curr = None, head
-while curr:
-    nxt = curr.next      # SAVE before overwriting
-    curr.next = prev
-    prev = curr
-    curr = nxt
-return prev              # new head
+// Dummy head (simplifies insert/remove at head)
+// dummy := &ListNode{}; dummy.Next = head
 
-# Fast/slow — find middle
-slow = fast = head
-while fast and fast.next:
-    slow = slow.next
-    fast = fast.next.next
-# slow is at middle
+// reverse — in-place reversal; returns new head
+func reverse(head *ListNode) *ListNode {
+	var prev *ListNode
+	curr := head
+	for curr != nil {
+		nxt := curr.Next // SAVE before overwriting
+		curr.Next = prev
+		prev = curr
+		curr = nxt
+	}
+	return prev // new head
+}
 
-# Cycle detection (Floyd)
-slow = fast = head
-while fast and fast.next:
-    slow, fast = slow.next, fast.next.next
-    if slow is fast:
-        return True   # cycle exists
-return False
+// findMiddle — fast/slow pointers; slow lands on middle
+func findMiddle(head *ListNode) *ListNode {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return slow
+}
 
-# Merge two sorted lists
-def merge(l1, l2):
-    dummy = ListNode(0)
-    cur = dummy
-    while l1 and l2:
-        if l1.val <= l2.val:
-            cur.next, l1 = l1, l1.next
-        else:
-            cur.next, l2 = l2, l2.next
-        cur = cur.next
-    cur.next = l1 or l2
-    return dummy.next
+// hasCycle — Floyd's cycle detection
+func hasCycle(head *ListNode) bool {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			return true // cycle exists
+		}
+	}
+	return false
+}
+
+// mergeSorted — merge two sorted lists
+func mergeSorted(l1, l2 *ListNode) *ListNode {
+	dummy := &ListNode{}
+	cur := dummy
+	for l1 != nil && l2 != nil {
+		if l1.Val <= l2.Val {
+			cur.Next = l1
+			l1 = l1.Next
+		} else {
+			cur.Next = l2
+			l2 = l2.Next
+		}
+		cur = cur.Next
+	}
+	if l1 != nil {
+		cur.Next = l1
+	} else {
+		cur.Next = l2
+	}
+	return dummy.Next
+}
 ```
 
 ## Complexity
@@ -74,7 +99,7 @@ def merge(l1, l2):
 ## Pitfalls
 
 1. **Losing `next` before reassignment** — always `nxt = curr.next` first.
-2. **Null pointer** — check `node and node.next` before advancing fast pointer.
+2. **Nil pointer** — check `node != nil && node.Next != nil` before advancing fast pointer.
 3. **Forgetting the dummy head** — skipping it forces special-casing for the head node.
 
 ## Common follow-ups

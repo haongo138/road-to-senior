@@ -17,29 +17,41 @@ status: draft
 
 **Pattern / template**
 
-```python
-# Opposite-ends (sorted array — two sum variant)
-def two_sum_sorted(nums, target):
-    left, right = 0, len(nums) - 1
-    while left < right:
-        s = nums[left] + nums[right]
-        if s == target:
-            return [left, right]
-        elif s < target:
-            left += 1
-        else:
-            right -= 1
-    return []
+```go
+// twoSumSorted — opposite-ends pointers on a sorted array
+func twoSumSorted(nums []int, target int) []int {
+	left, right := 0, len(nums)-1
+	for left < right {
+		s := nums[left] + nums[right]
+		switch {
+		case s == target:
+			return []int{left, right}
+		case s < target:
+			left++
+		default:
+			right--
+		}
+	}
+	return nil
+}
 
-# Slow-fast (linked list cycle detection — Floyd's)
-def has_cycle(head):
-    slow = fast = head
-    while fast and fast.next:
-        slow = slow.next
-        fast = fast.next.next
-        if slow is fast:
-            return True
-    return False
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+// hasCycle — slow/fast pointers (Floyd's cycle detection)
+func hasCycle(head *ListNode) bool {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			return true
+		}
+	}
+	return false
+}
 ```
 
 **Complexity**
@@ -49,7 +61,7 @@ def has_cycle(head):
 **Pitfalls**
 - Opposite-ends only works on *sorted* input (or when a monotone property lets you discard one side safely).
 - Slow-fast cycle detection: start both at `head`, not `head.next`, to handle single-element lists.
-- Don't use two pointers on unsorted data hoping to find a pair — sort first or use a hashmap.
+- Don't use two pointers on unsorted data hoping to find a pair — sort first or use a map.
 
 ## Common follow-ups
 

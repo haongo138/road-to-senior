@@ -14,25 +14,37 @@ status: draft
 
 **Pattern / template**
 
-```python
-def sliding_window(arr, condition):
-    left = 0
-    window_state = initial_state()
-    best = 0  # or float('inf') for minimum
+```go
+// slidingWindow finds the length of the longest subarray satisfying a condition.
+// Customize windowViolates and the window state for the specific problem.
+func slidingWindow(arr []int) int {
+	left := 0
+	windowState := map[int]int{} // example: frequency map
+	best := 0                    // use math.MaxInt for minimum-length problems
 
-    for right in range(len(arr)):
-        # 1. Expand — add arr[right] to window
-        add(window_state, arr[right])
+	for right := 0; right < len(arr); right++ {
+		// 1. Expand — add arr[right] to window
+		windowState[arr[right]]++
 
-        # 2. Shrink — while condition violated, move left forward
-        while window_violates(window_state):
-            remove(window_state, arr[left])
-            left += 1
+		// 2. Shrink — while condition violated, move left forward
+		for windowViolates(windowState) {
+			windowState[arr[left]]--
+			if windowState[arr[left]] == 0 {
+				delete(windowState, arr[left])
+			}
+			left++
+		}
 
-        # 3. Record answer for valid window
-        best = update(best, right - left + 1)
+		// 3. Record answer for valid window
+		if size := right - left + 1; size > best {
+			best = size
+		}
+	}
+	return best
+}
 
-    return best
+// windowViolates is a placeholder — replace with the actual constraint check.
+func windowViolates(state map[int]int) bool { return false }
 ```
 
 Fixed-size window variant — just move `left = right - k + 1` unconditionally.

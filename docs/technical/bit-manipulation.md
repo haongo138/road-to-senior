@@ -19,35 +19,54 @@ status: draft
 
 ## Pattern / template
 
-```python
-# Common bit ops
-x & 1          # parity (0 = even, 1 = odd)
-x >> 1         # floor divide by 2
-x << 1         # multiply by 2
-x & (x - 1)   # clear lowest set bit
-x & (-x)       # isolate lowest set bit
-x ^ x          # == 0 (cancellation)
-x | (1 << k)   # set bit k
-x & ~(1 << k)  # clear bit k
-(x >> k) & 1   # read bit k
+```go
+// Common bit ops (int is 64-bit on most platforms)
+//   x & 1           — parity (0 = even, 1 = odd)
+//   x >> 1          — arithmetic right shift (divide by 2, rounds toward -∞)
+//   x << 1          — multiply by 2
+//   x & (x - 1)     — clear lowest set bit
+//   x & (-x)        — isolate lowest set bit
+//   x ^ x           — == 0 (cancellation)
+//   x | (1 << k)    — set bit k
+//   x &^ (1 << k)   — clear bit k  (Go's AND-NOT operator)
+//   (x >> k) & 1    — read bit k
+//
+// Use uint / uint32 for logical (unsigned) right shifts and to avoid
+// sign-extension issues; signed >> is arithmetic in Go.
 
-# Count set bits (Brian Kernighan)
-def count_bits(x):
-    count = 0
-    while x:
-        x &= x - 1    # clear lowest set bit
-        count += 1
+// Count set bits (Brian Kernighan)
+func countBits(x int) int {
+    count := 0
+    for x != 0 {
+        x &= x - 1 // clear lowest set bit
+        count++
+    }
     return count
+}
 
-# Single number (all others appear twice)
-from functools import reduce
-import operator
-single = reduce(operator.xor, nums)  # XOR everything → duplicates cancel
+// Single number — all others appear twice
+func singleNumber(nums []int) int {
+    result := 0
+    for _, n := range nums {
+        result ^= n // XOR everything → duplicates cancel
+    }
+    return result
+}
 
-# Enumerate all subsets of {0..n-1}
-n = 4
-for mask in range(1 << n):
-    subset = [i for i in range(n) if mask & (1 << i)]
+// Enumerate all subsets of {0..n-1}
+func allSubsets(n int) [][]int {
+    var subsets [][]int
+    for mask := 0; mask < (1 << n); mask++ {
+        var subset []int
+        for i := 0; i < n; i++ {
+            if mask&(1<<i) != 0 {
+                subset = append(subset, i)
+            }
+        }
+        subsets = append(subsets, subset)
+    }
+    return subsets
+}
 ```
 
 ## Complexity
@@ -60,9 +79,10 @@ for mask in range(1 << n):
 
 ## Pitfalls
 
-1. **Signed shifts / Python big ints:** Python integers have arbitrary precision — apply a 32-bit mask `& 0xFFFFFFFF` when the problem expects 32-bit signed behavior.
+1. **Fixed-width integers:** Go's `int` is 64-bit on most platforms (not arbitrary precision). `>>` on a signed `int` is an *arithmetic* shift (sign-extending). Use `uint` or `uint32` when you need a *logical* (zero-filling) right shift or to avoid sign-extension. Overflow wraps silently for integer types — no exception is raised.
 2. **Operator precedence:** `&`, `|`, `^` bind loosely — always parenthesize: `(x & mask) == 0`, not `x & mask == 0`.
 3. **Off-by-one on bit index:** bit k is `1 << k`; bit 0 is the LSB.
+4. **Clear-bit operator:** Go uses `&^` (AND-NOT) instead of `& ~` — write `x &^ (1 << k)` to clear bit k.
 
 ## Common follow-ups
 

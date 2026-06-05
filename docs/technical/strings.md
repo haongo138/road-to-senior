@@ -8,45 +8,67 @@ status: draft
 
 # Strings
 
-**Key idea** — String problems almost always reduce to one of: frequency comparison (anagram, permutation), sliding window on characters, or index/pointer manipulation. A frequency map (hashmap from character to count) is the go-to supporting structure.
+**Key idea** — String problems almost always reduce to one of: frequency comparison (anagram, permutation), sliding window on characters, or index/pointer manipulation. A frequency map (`map[byte]int` or a fixed `[26]int` array) is the go-to supporting structure.
 
 **When to use** — Anagram detection, longest substring without repeating characters, minimum window substring, palindrome checks, string matching, word frequency.
 
 **Pattern / template**
 
-```python
-from collections import Counter
+```go
+// isAnagram checks whether s and t are anagrams of each other.
+func isAnagram(s, t string) bool {
+	if len(s) != len(t) {
+		return false
+	}
+	freq := [26]int{}
+	for i := 0; i < len(s); i++ {
+		freq[s[i]-'a']++
+		freq[t[i]-'a']--
+	}
+	return freq == [26]int{}
+}
 
-# Anagram check
-def is_anagram(s, t):
-    return Counter(s) == Counter(t)
+// lengthOfLongestSubstring returns the length of the longest substring
+// without repeating characters.
+func lengthOfLongestSubstring(s string) int {
+	charIndex := map[byte]int{}
+	left, best := 0, 0
+	for right := 0; right < len(s); right++ {
+		ch := s[right]
+		if idx, ok := charIndex[ch]; ok && idx >= left {
+			left = idx + 1
+		}
+		charIndex[ch] = right
+		if size := right - left + 1; size > best {
+			best = size
+		}
+	}
+	return best
+}
 
-# Sliding window — longest substring without repeating chars
-def length_of_longest_substring(s):
-    char_index = {}
-    left = 0
-    best = 0
-    for right, ch in enumerate(s):
-        if ch in char_index and char_index[ch] >= left:
-            left = char_index[ch] + 1
-        char_index[ch] = right
-        best = max(best, right - left + 1)
-    return best
-
-# Fixed-window anagram count
-def find_anagrams(s, p):
-    need = Counter(p)
-    window = Counter(s[:len(p)])
-    result = [0] if window == need else []
-    for i in range(len(p), len(s)):
-        window[s[i]] += 1
-        old = s[i - len(p)]
-        window[old] -= 1
-        if window[old] == 0:
-            del window[old]
-        if window == need:
-            result.append(i - len(p) + 1)
-    return result
+// findAnagrams returns all start indices where an anagram of p begins in s.
+func findAnagrams(s, p string) []int {
+	if len(p) > len(s) {
+		return nil
+	}
+	var need, window [26]int
+	for i := 0; i < len(p); i++ {
+		need[p[i]-'a']++
+		window[s[i]-'a']++
+	}
+	result := []int{}
+	if window == need {
+		result = append(result, 0)
+	}
+	for i := len(p); i < len(s); i++ {
+		window[s[i]-'a']++
+		window[s[i-len(p)]-'a']--
+		if window == need {
+			result = append(result, i-len(p)+1)
+		}
+	}
+	return result
+}
 ```
 
 **Complexity**
@@ -55,8 +77,8 @@ def find_anagrams(s, p):
 - Counter comparison: O(alphabet size) — effectively O(1) for fixed alphabets.
 
 **Pitfalls**
-- Comparing `Counter` objects is safe in Python but linear in the number of distinct keys — for large alphabets, use a running match count instead.
-- Remember strings are immutable in Python/Java — building a result with `+=` in a loop is O(n²); use `join` or a list buffer.
+- Comparing `[26]int` arrays is O(1) in Go; for large/arbitrary alphabets use a `map[rune]int` with a running match count instead.
+- In Go, strings are immutable — building a result with `+=` in a loop is O(n²); use a `strings.Builder` or `[]byte` buffer instead.
 - Sliding window on strings: shrink the window only when the invariant is violated, not on every step.
 
 ## Common follow-ups

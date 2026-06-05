@@ -20,32 +20,50 @@ Recursion checklist (apply to every tree problem):
 
 **Pattern / template**
 
-```python
-def solve(node):
-    # 1. Base case
-    if node is None:
-        return BASE_VALUE
+```go
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
 
-    # 2. Recurse into children (recurrence relation)
-    left  = solve(node.left)
-    right = solve(node.right)
+// solve — generic DFS template: base case → recurse → combine
+func solve(node *TreeNode) int {
+	// 1. Base case
+	if node == nil {
+		return 0 // replace with appropriate BASE_VALUE
+	}
 
-    # 3. Combine and return to parent
-    return combine(node.val, left, right)
+	// 2. Recurse into children (recurrence relation)
+	left := solve(node.Left)
+	right := solve(node.Right)
+
+	// 3. Combine and return to parent
+	return combine(node.Val, left, right)
+}
 ```
 
 BFS template:
 
-```python
-from collections import deque
-
-def bfs(root):
-    queue = deque([root])
-    while queue:
-        node = queue.popleft()
-        process(node)
-        if node.left:  queue.append(node.left)
-        if node.right: queue.append(node.right)
+```go
+// bfs — level-order traversal using a slice as a queue
+func bfs(root *TreeNode) {
+	if root == nil {
+		return
+	}
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		node := queue[0]
+		queue = queue[1:]
+		process(node)
+		if node.Left != nil {
+			queue = append(queue, node.Left)
+		}
+		if node.Right != nil {
+			queue = append(queue, node.Right)
+		}
+	}
+}
 ```
 
 **Complexity**
@@ -53,7 +71,7 @@ def bfs(root):
 - BFS traversal: O(n) time, O(n) space (queue holds up to one full level)
 
 **Pitfalls**
-- Forgetting the null / empty base case causes NullPointerException.
+- Forgetting the nil / empty base case causes a nil pointer dereference.
 - Mixing up what the recursive call *returns* vs what it *does* (return value vs side effect).
 - Using BFS when DFS is sufficient wastes memory; prefer DFS unless level-order is required.
 

@@ -8,41 +8,49 @@ status: draft
 
 # Prefix Sum
 
-**Key idea** — Build an array `prefix[i] = sum(arr[0..i-1])`. Then any subarray sum `arr[l..r]` = `prefix[r+1] - prefix[l]` in O(1). Pair with a hashmap to count subarrays whose sum equals a target.
+**Key idea** — Build a slice `prefix[i] = sum(arr[0..i-1])`. Then any subarray sum `arr[l..r]` = `prefix[r+1] - prefix[l]` in O(1). Pair with a map to count subarrays whose sum equals a target.
 
 **When to use** — Range sum queries, count subarrays with sum = k, subarray sum divisible by k, equilibrium index. Cue: "subarray sum" or "range query."
 
 **Pattern / template**
 
-```python
-# Build prefix sums
-prefix = [0] * (len(arr) + 1)
-for i, x in enumerate(arr):
-    prefix[i+1] = prefix[i] + x
+```go
+// buildPrefix returns a prefix-sum slice where prefix[i] = sum(arr[0..i-1])
+func buildPrefix(arr []int) []int {
+	prefix := make([]int, len(arr)+1)
+	for i, x := range arr {
+		prefix[i+1] = prefix[i] + x
+	}
+	return prefix
+}
 
-# Range sum [l, r] (0-indexed, inclusive)
-range_sum = prefix[r+1] - prefix[l]
+// rangeSum returns sum of arr[l..r] (0-indexed, inclusive) using prefix sums
+func rangeSum(prefix []int, l, r int) int {
+	return prefix[r+1] - prefix[l]
+}
 
-# Count subarrays with sum == k (hashmap trick)
-from collections import defaultdict
-count = 0
-running = 0
-seen = defaultdict(int)
-seen[0] = 1          # empty prefix
-for x in arr:
-    running += x
-    count += seen[running - k]
-    seen[running] += 1
+// countSubarraysWithSum counts contiguous subarrays whose sum equals k
+func countSubarraysWithSum(arr []int, k int) int {
+	count := 0
+	running := 0
+	seen := map[int]int{0: 1} // empty prefix
+	for _, x := range arr {
+		running += x
+		count += seen[running-k]
+		seen[running]++
+	}
+	return count
+}
 ```
 
 **Complexity**
 - Build: O(n) time, O(n) space.
 - Each range query: O(1).
-- Subarray count with hashmap: O(n) time, O(n) space.
+- Subarray count with map: O(n) time, O(n) space.
 
 **Pitfalls**
 - Off-by-one: `prefix[0] = 0` (empty prefix) is essential — initialise `seen[0] = 1` for the subarray count pattern.
-- The hashmap stores prefix sums *seen so far* — do not add the current running sum to `seen` before checking.
+- The map stores prefix sums *seen so far* — do not add the current running sum to `seen` before checking.
 - For 2D prefix sums (grid queries), extend to `prefix[i][j]` with inclusion-exclusion.
 
 ## Common follow-ups

@@ -18,44 +18,78 @@ status: draft
 
 **Pattern / template**
 
-```python
-from collections import deque, defaultdict
-import heapq
+```go
+import "container/heap"
 
-# Kahn's topological sort
-def topo_sort(n, prerequisites):
-    graph   = defaultdict(list)
-    in_deg  = [0] * n
-    for u, v in prerequisites:   # u must come before v
-        graph[u].append(v)
-        in_deg[v] += 1
+// topoSort returns a topological ordering of n nodes given prerequisite pairs.
+// Returns nil if a cycle is detected.
+func topoSort(n int, prerequisites [][2]int) []int {
+	graph := make([][]int, n)
+	inDeg := make([]int, n)
+	for _, e := range prerequisites {
+		u, v := e[0], e[1] // u must come before v
+		graph[u] = append(graph[u], v)
+		inDeg[v]++
+	}
+	queue := []int{}
+	for i := 0; i < n; i++ {
+		if inDeg[i] == 0 {
+			queue = append(queue, i)
+		}
+	}
+	order := make([]int, 0, n)
+	for len(queue) > 0 {
+		node := queue[0]
+		queue = queue[1:]
+		order = append(order, node)
+		for _, nb := range graph[node] {
+			inDeg[nb]--
+			if inDeg[nb] == 0 {
+				queue = append(queue, nb)
+			}
+		}
+	}
+	if len(order) == n {
+		return order
+	}
+	return nil // cycle exists
+}
 
-    queue = deque(i for i in range(n) if in_deg[i] == 0)
-    order = []
-    while queue:
-        node = queue.popleft()
-        order.append(node)
-        for neighbor in graph[node]:
-            in_deg[neighbor] -= 1
-            if in_deg[neighbor] == 0:
-                queue.append(neighbor)
+// dijkstra returns shortest distances from src.
+// graph[u] holds (neighbor, weight) pairs as [2]int.
+func dijkstra(graph [][][2]int, src int) []int {
+	const inf = 1<<31 - 1
+	dist := make([]int, len(graph))
+	for i := range dist {
+		dist[i] = inf
+	}
+	dist[src] = 0
+	h := &minHeap{{0, src}} // (cost, node)
+	heap.Init(h)
+	for h.Len() > 0 {
+		item := heap.Pop(h).([2]int)
+		cost, node := item[0], item[1]
+		if cost > dist[node] {
+			continue // stale entry
+		}
+		for _, edge := range graph[node] {
+			nb, w := edge[0], edge[1]
+			if newCost := cost + w; newCost < dist[nb] {
+				dist[nb] = newCost
+				heap.Push(h, [2]int{newCost, nb})
+			}
+		}
+	}
+	return dist
+}
 
-    return order if len(order) == n else []  # empty → cycle exists
+type minHeap [][2]int
 
-# Dijkstra
-def dijkstra(graph, src):
-    dist = {src: 0}
-    heap = [(0, src)]            # (cost, node)
-    while heap:
-        cost, node = heapq.heappop(heap)
-        if cost > dist.get(node, float('inf')):
-            continue             # stale entry
-        for neighbor, weight in graph[node]:
-            new_cost = cost + weight
-            if new_cost < dist.get(neighbor, float('inf')):
-                dist[neighbor] = new_cost
-                heapq.heappush(heap, (new_cost, neighbor))
-    return dist
+func (h minHeap) Len() int            { return len(h) }
+func (h minHeap) Less(i, j int) bool  { return h[i][0] < h[j][0] }
+func (h minHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *minHeap) Push(x any)         { *h = append(*h, x.([2]int)) }
+func (h *minHeap) Pop() any           { old := *h; x := old[len(old)-1]; *h = old[:len(old)-1]; return x }
 ```
 
 **Complexity**

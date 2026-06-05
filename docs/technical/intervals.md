@@ -8,7 +8,7 @@ status: draft
 
 # Intervals
 
-**Key idea:** Most interval problems start with **sorting by start time** (or by end time for scheduling), then a single linear scan. Overlap test: `a.start <= b.end and b.start <= a.end`. The **sweep-line** technique (+1 at open, -1 at close, sort all events) answers "maximum simultaneous overlaps" in O(n log n).
+**Key idea:** Most interval problems start with **sorting by start time** (or by end time for scheduling), then a single linear scan. Overlap test: `a.start <= b.end && b.start <= a.end`. The **sweep-line** technique (+1 at open, -1 at close, sort all events) answers "maximum simultaneous overlaps" in O(n log n).
 
 ## When to use
 
@@ -19,34 +19,57 @@ status: draft
 
 ## Pattern / template
 
-```python
-# --- Merge overlapping intervals ---
-def merge(intervals):
-    intervals.sort(key=lambda x: x[0])   # sort by start
-    merged = [intervals[0]]
-    for start, end in intervals[1:]:
-        if start <= merged[-1][1]:        # overlaps
-            merged[-1][1] = max(merged[-1][1], end)
-        else:
-            merged.append([start, end])
-    return merged
+```go
+import "sort"
 
-# --- Sweep-line: max simultaneous overlaps ---
-def max_overlap(intervals):
-    events = []
-    for start, end in intervals:
-        events.append((start, +1))   # open
-        events.append((end,   -1))   # close
-    events.sort()                    # ties: close before open if endpoints don't overlap
-    peak = cur = 0
-    for _, delta in events:
-        cur += delta
-        peak = max(peak, cur)
-    return peak
+type Interval struct{ start, end int }
 
-# Overlap test (inclusive endpoints)
-def overlaps(a, b):
-    return a[0] <= b[1] and b[0] <= a[1]
+// merge overlapping intervals
+func merge(intervals []Interval) []Interval {
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i].start < intervals[j].start
+	})
+	merged := []Interval{intervals[0]}
+	for _, iv := range intervals[1:] {
+		last := &merged[len(merged)-1]
+		if iv.start <= last.end { // overlaps
+			if iv.end > last.end {
+				last.end = iv.end
+			}
+		} else {
+			merged = append(merged, iv)
+		}
+	}
+	return merged
+}
+
+// maxOverlap — sweep-line: max simultaneous overlaps
+func maxOverlap(intervals []Interval) int {
+	type event struct{ time, delta int }
+	events := make([]event, 0, len(intervals)*2)
+	for _, iv := range intervals {
+		events = append(events, event{iv.start, +1}, event{iv.end, -1})
+	}
+	sort.Slice(events, func(i, j int) bool {
+		if events[i].time != events[j].time {
+			return events[i].time < events[j].time
+		}
+		return events[i].delta < events[j].delta // closes before opens on tie
+	})
+	peak, cur := 0, 0
+	for _, e := range events {
+		cur += e.delta
+		if cur > peak {
+			peak = cur
+		}
+	}
+	return peak
+}
+
+// overlaps — inclusive endpoint test
+func overlaps(a, b Interval) bool {
+	return a.start <= b.end && b.start <= a.end
+}
 ```
 
 ## Complexity

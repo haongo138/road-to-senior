@@ -19,36 +19,57 @@ status: draft
 
 ## Pattern / template
 
-```python
-# Interval scheduling — maximize non-overlapping intervals
-# Exchange argument: always pick the interval that ends earliest
-def max_non_overlap(intervals):
-    intervals.sort(key=lambda x: x[1])   # sort by end time
-    count, end = 0, float('-inf')
-    for start, finish in intervals:
-        if start >= end:
-            count += 1
+```go
+import (
+    "math"
+    "sort"
+)
+
+// Interval scheduling — maximize non-overlapping intervals
+// Exchange argument: always pick the interval that ends earliest
+func maxNonOverlap(intervals [][2]int) int {
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][1] < intervals[j][1] // sort by end time
+    })
+    count, end := 0, math.MinInt64
+    for _, iv := range intervals {
+        start, finish := iv[0], iv[1]
+        if start >= end {
+            count++
             end = finish
+        }
+    }
     return count
+}
 
-# Jump Game — can you reach the last index?
-def can_jump(nums):
-    reach = 0
-    for i, jump in enumerate(nums):
-        if i > reach:
-            return False        # stranded
-        reach = max(reach, i + jump)
-    return True
+// Jump Game — can you reach the last index?
+func canJump(nums []int) bool {
+    reach := 0
+    for i, jump := range nums {
+        if i > reach {
+            return false // stranded
+        }
+        if i+jump > reach {
+            reach = i + jump
+        }
+    }
+    return true
+}
 
-# Jump Game II — minimum jumps
-def min_jumps(nums):
-    jumps = cur_end = farthest = 0
-    for i in range(len(nums) - 1):
-        farthest = max(farthest, i + nums[i])
-        if i == cur_end:        # must jump now
-            jumps += 1
-            cur_end = farthest
+// Jump Game II — minimum jumps
+func minJumps(nums []int) int {
+    jumps, curEnd, farthest := 0, 0, 0
+    for i := 0; i < len(nums)-1; i++ {
+        if i+nums[i] > farthest {
+            farthest = i + nums[i]
+        }
+        if i == curEnd { // must jump now
+            jumps++
+            curEnd = farthest
+        }
+    }
     return jumps
+}
 ```
 
 ## Complexity

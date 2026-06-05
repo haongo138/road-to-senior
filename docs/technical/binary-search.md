@@ -16,30 +16,36 @@ Classic use: find a value in a sorted array. Advanced use (binary search on answ
 
 **Pattern / template**
 
-```python
-# Classic — find target in sorted array
-def binary_search(arr, target):
-    lo, hi = 0, len(arr) - 1
-    while lo <= hi:
-        mid = lo + (hi - lo) // 2
-        if arr[mid] == target:
+```go
+// Classic — find target in sorted array
+func binarySearch(arr []int, target int) int {
+    lo, hi := 0, len(arr)-1
+    for lo <= hi {
+        mid := lo + (hi-lo)/2
+        if arr[mid] == target {
             return mid
-        elif arr[mid] < target:
+        } else if arr[mid] < target {
             lo = mid + 1
-        else:
+        } else {
             hi = mid - 1
+        }
+    }
     return -1
+}
 
-# Binary search on answer — find minimum feasible value
-def min_feasible(lo, hi, feasible):
-    # feasible(x): returns True when x is large enough
-    while lo < hi:
-        mid = lo + (hi - lo) // 2
-        if feasible(mid):
-            hi = mid        # mid could be the answer; try smaller
-        else:
-            lo = mid + 1    # too small; must go larger
-    return lo               # lo == hi == answer
+// Binary search on answer — find minimum feasible value
+func minFeasible(lo, hi int, feasible func(int) bool) int {
+    // feasible(x): returns true when x is large enough
+    for lo < hi {
+        mid := lo + (hi-lo)/2
+        if feasible(mid) {
+            hi = mid      // mid could be the answer; try smaller
+        } else {
+            lo = mid + 1  // too small; must go larger
+        }
+    }
+    return lo // lo == hi == answer
+}
 ```
 
 **Complexity**
@@ -47,14 +53,14 @@ def min_feasible(lo, hi, feasible):
 - For "binary search on answer" the total time is O(log(range) × cost_of_feasible).
 
 **Pitfalls**
-- Integer overflow: use `mid = lo + (hi - lo) // 2` not `(lo + hi) // 2`.
+- Integer overflow: use `mid = lo + (hi-lo)/2` not `(lo+hi)/2`.
 - Off-by-one in loop invariant: `lo <= hi` for exact match; `lo < hi` for lower-bound style.
 - The predicate must be *strictly monotone* — if it can flip back and forth, binary search gives wrong answers.
 - Forgetting to update both `lo` and `hi` inside every branch leads to infinite loops.
 
 ## Leftmost vs rightmost
 
-When searching for the boundary of a monotonic predicate (e.g. first/last position of a value), you are not searching for a value but for the point where the predicate flips from false to true. Bias the midpoint down (`lo + (hi - lo) // 2`) and update `lo` or `hi` — never exclude `mid` from the next range — to converge on the first-true (leftmost) or last-true (rightmost) boundary. Use `lo < hi` as the loop condition (not `lo <= hi`) so the loop exits with `lo == hi` at the answer.
+When searching for the boundary of a monotonic predicate (e.g. first/last position of a value), you are not searching for a value but for the point where the predicate flips from false to true. Bias the midpoint down (`lo + (hi-lo)/2`) and update `lo` or `hi` — never exclude `mid` from the next range — to converge on the first-true (leftmost) or last-true (rightmost) boundary. Use `lo < hi` as the loop condition (not `lo <= hi`) so the loop exits with `lo == hi` at the answer.
 
 ## Common follow-ups
 

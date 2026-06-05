@@ -14,17 +14,22 @@ status: draft
 
 **Pattern / template**
 
-```python
-def backtrack(state, choices):
-    if is_complete(state):
-        results.append(state[:])   # record a copy
+```go
+func backtrack(state []int, choices []int, results *[][]int) {
+    if isComplete(state) {
+        cp := make([]int, len(state))
+        copy(cp, state)                          // record a copy
+        *results = append(*results, cp)
         return
-
-    for choice in choices:
-        if is_valid(state, choice):
-            state.append(choice)           # choose
-            backtrack(state, next_choices) # explore
-            state.pop()                    # un-choose (backtrack)
+    }
+    for _, choice := range choices {
+        if isValid(state, choice) {
+            state = append(state, choice)                   // choose
+            backtrack(state, nextChoices(choice), results)  // explore
+            state = state[:len(state)-1]                    // un-choose (backtrack)
+        }
+    }
+}
 ```
 
 **Complexity**
@@ -32,7 +37,7 @@ def backtrack(state, choices):
 - Space: O(d) call stack + O(results) for storing solutions.
 
 **Pitfalls**
-- Forgetting to copy `state` when recording a solution (you'll push the same mutable list repeatedly).
+- Forgetting to copy `state` when recording a solution (you'll push the same backing slice repeatedly — use `copy` into a new slice).
 - Missing the pruning condition — without it the algorithm degrades to brute force.
 - For permutations, track a `used` boolean array to avoid reusing the same index.
 

@@ -14,18 +14,20 @@ status: draft
 
 **Pattern / template**
 
-```python
-def solve(arr, lo, hi):
-    # Base case
-    if lo >= hi:
-        return base_answer(arr[lo])
+```go
+func solve(arr []int, lo, hi int) int {
+    // Base case
+    if lo >= hi {
+        return baseAnswer(arr[lo])
+    }
 
-    mid = (lo + hi) // 2
+    mid := lo + (hi-lo)/2
 
-    left  = solve(arr, lo, mid)      # solve left half
-    right = solve(arr, mid + 1, hi)  # solve right half
+    left := solve(arr, lo, mid)     // solve left half
+    right := solve(arr, mid+1, hi)  // solve right half
 
-    return merge(left, right)        # combine
+    return merge(left, right) // combine
+}
 ```
 
 Merge sort is the canonical example — `merge` takes O(n) and recurrence is T(n) = 2T(n/2) + O(n) → O(n log n).
@@ -37,7 +39,7 @@ Merge sort is the canonical example — `merge` takes O(n) and recurrence is T(n
 
 **Pitfalls**
 - Forgetting to handle the base case for a single element vs empty range.
-- Off-by-one in `mid` calculation — use `lo + (hi - lo) // 2` to avoid integer overflow in languages without big integers.
+- Off-by-one in `mid` calculation — use `lo + (hi-lo)/2` to avoid integer overflow.
 - Merge step must handle both halves being fully consumed before the loop exits.
 
 ## Common follow-ups

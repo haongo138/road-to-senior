@@ -20,26 +20,51 @@ status: draft
 
 **Pattern / template**
 
-```python
-import heapq
+```go
+import "container/heap"
 
-# Min-heap — top-K smallest
-heap = []
-for x in nums:
-    heapq.heappush(heap, x)
-    if len(heap) > k:
-        heapq.heappop(heap)  # evict the largest of the k smallest
-# heap now contains the K smallest elements
+// Go has no built-in heap — implement container/heap interface (5 methods).
+type MinHeap []int
 
-# Monotonic stack — next greater element
-def next_greater(nums):
-    result = [-1] * len(nums)
-    stack = []  # stores indices; stack top = most recent unresolved index
-    for i, x in enumerate(nums):
-        while stack and nums[stack[-1]] < x:
-            result[stack.pop()] = x  # x is the next greater for the top
-        stack.append(i)
+func (h MinHeap) Len() int           { return len(h) }
+func (h MinHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h MinHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *MinHeap) Push(x any)        { *h = append(*h, x.(int)) }
+func (h *MinHeap) Pop() any {
+    old := *h; n := len(old); x := old[n-1]; *h = old[:n-1]; return x
+}
+
+// Top-K smallest — keep a max-heap of size k (negate to invert order)
+func topKSmallest(nums []int, k int) {
+    h := &MinHeap{}
+    heap.Init(h)
+    for _, x := range nums {
+        heap.Push(h, -x)     // negate → max-heap behaviour
+        if h.Len() > k {
+            heap.Pop(h)       // evict the largest of the k smallest
+        }
+    }
+    // h now holds (negated) K smallest elements
+}
+
+// Stack — a plain slice; push = append, pop = s[:len-1]
+// No separate type needed.
+
+// Monotonic stack — next greater element
+func nextGreater(nums []int) []int {
+    result := make([]int, len(nums))
+    for i := range result { result[i] = -1 }
+    stack := []int{} // stores indices; top = most recent unresolved index
+    for i, x := range nums {
+        for len(stack) > 0 && nums[stack[len(stack)-1]] < x {
+            top := stack[len(stack)-1]
+            stack = stack[:len(stack)-1]
+            result[top] = x // x is the next greater for top
+        }
+        stack = append(stack, i)
+    }
     return result
+}
 ```
 
 **Complexity**
@@ -48,16 +73,18 @@ def next_greater(nums):
 - Space: O(n) for both.
 
 **Pitfalls**
-- Python's `heapq` is a *min*-heap. For max-heap, negate values: push `-x`, pop and negate.
+- Go has no built-in heap — use `container/heap` with the 5-method interface (Len, Less, Swap, Push, Pop). The boilerplate is unavoidable but small.
+- For a max-heap, either flip the `Less` method or negate values when pushing/popping.
+- Stack is just a slice: `s = append(s, x)` to push; `x, s = s[len(s)-1], s[:len(s)-1]` to pop.
 - Monotonic stack direction matters: decreasing stack → next *greater* element; increasing stack → next *smaller*.
-- Heap does not sort the full array — only guarantees the top is the min/max.
+- Heap does not sort the full slice — only guarantees the top is the min/max.
 
 ## Common follow-ups
 
 - How do you maintain a running median using two heaps?
 - When is a monotonic stack increasing vs decreasing, and how does the direction determine what you're computing?
 - What is the time complexity of building a heap from an unsorted array, and why?
-- How would you implement a max-heap in Python given that `heapq` is a min-heap?
+- How would you implement a max-heap in Go given that `container/heap` is a min-heap by default?
 
 ## Practice (LeetCode)
 

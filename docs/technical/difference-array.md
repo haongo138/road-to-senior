@@ -10,26 +10,31 @@ status: draft
 
 **Key idea** — A difference array `diff` lets you add a value `v` to every element in range `[l, r]` in O(1) by doing `diff[l] += v` and `diff[r+1] -= v`. After all updates, reconstruct the original array with a prefix sum pass. Flip the usual relationship: prefix sum *builds* from a difference array.
 
-**When to use** — Multiple range increment/decrement operations on an array, flight/meeting booking (find peak simultaneous bookings), corporate flight bookings. Cue: "add value to range," "how many events overlap at each point."
+**When to use** — Multiple range increment/decrement operations on a slice, flight/meeting booking (find peak simultaneous bookings), corporate flight bookings. Cue: "add value to range," "how many events overlap at each point."
 
 **Pattern / template**
 
-```python
-def apply_range_updates(n, updates):
-    # updates: list of (l, r, val) — add val to arr[l..r]
-    diff = [0] * (n + 1)
+```go
+// applyRangeUpdates applies range add-updates and returns the result slice.
+// updates: each entry is [l, r, val] — add val to arr[l..r] (0-indexed).
+func applyRangeUpdates(n int, updates [][3]int) []int {
+    diff := make([]int, n+1) // extra slot so diff[r+1] is always safe
 
-    for l, r, val in updates:
-        diff[l]   += val
-        diff[r+1] -= val   # sentinel cancels after range
+    for _, u := range updates {
+        l, r, val := u[0], u[1], u[2]
+        diff[l] += val
+        diff[r+1] -= val // sentinel cancels after range
+    }
 
-    # Reconstruct with prefix sum
-    result = []
-    running = 0
-    for i in range(n):
+    // Reconstruct with prefix sum
+    result := make([]int, n)
+    running := 0
+    for i := 0; i < n; i++ {
         running += diff[i]
-        result.append(running)
+        result[i] = running
+    }
     return result
+}
 ```
 
 **Complexity**

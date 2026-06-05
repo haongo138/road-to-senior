@@ -8,37 +8,51 @@ status: draft
 
 # Hashmap
 
-**Key idea** — Use a hashmap as a *supporting* data structure alongside other algorithms. It shines in three roles:
+**Key idea** — Use a map (`map[K]V`) as a *supporting* data structure alongside other algorithms. It shines in three roles:
 1. **Frequency** — count occurrences of elements.
 2. **Memoize** — store results keyed by a state to avoid recomputation.
 3. **O(1) access** — turn a linear scan into a constant-time lookup.
 
-Note: **Anything can be a key** — integers, strings, tuples, coordinates, even the hash of a data structure.
+Note: **Anything comparable can be a key** — integers, strings, fixed-size arrays (`[2]int`), structs with comparable fields. Slices and maps are not comparable and cannot be used as map keys directly; convert to a string or use a fixed-size array key.
 
 **When to use** — Two-sum (complement lookup), anagram detection (frequency map), caching sub-results, grouping elements by a derived key (e.g. sorted word → anagram group), checking duplicates.
 
 **Pattern / template**
 
-```python
-# Frequency map
-from collections import Counter
-freq = Counter(arr)             # {element: count}
+```go
+// Frequency map
+func freqMap(arr []int) map[int]int {
+    freq := make(map[int]int)
+    for _, x := range arr {
+        freq[x]++
+    }
+    return freq
+}
 
-# Complement lookup (Two Sum)
-seen = {}
-for i, x in enumerate(nums):
-    if target - x in seen:
-        return [seen[target - x], i]
-    seen[x] = i
+// Complement lookup (Two Sum)
+func twoSum(nums []int, target int) [2]int {
+    seen := make(map[int]int) // value → index
+    for i, x := range nums {
+        if j, ok := seen[target-x]; ok {
+            return [2]int{j, i}
+        }
+        seen[x] = i
+    }
+    return [2]int{-1, -1}
+}
 
-# Memoization (manual cache)
-memo = {}
-def dp(state):
-    if state in memo:
-        return memo[state]
-    # ... compute result ...
+// Memoization (manual cache with map)
+var memo = make(map[[2]int]int)
+
+func dp(state [2]int) int {
+    if v, ok := memo[state]; ok {
+        return v
+    }
+    // ... compute result ...
+    result := 0 // placeholder
     memo[state] = result
     return result
+}
 ```
 
 **Complexity**
@@ -47,9 +61,9 @@ def dp(state):
 - Space: O(n) for n entries.
 
 **Pitfalls**
-- Hash collisions can degrade performance — prefer built-in dict/HashMap which handles this.
-- Mutable objects (lists, dicts) cannot be keys in Python; convert to tuple first.
-- Don't forget to handle the case where a key is absent (`get(key, default)` or `defaultdict`).
+- Hash collisions can degrade performance — Go's built-in map handles this automatically.
+- Only comparable types can be map keys; slices and maps are not comparable — use a string or fixed-size array as the key instead.
+- Don't forget to handle the case where a key is absent — use the two-value form `v, ok := m[key]` and check `ok` before using `v`.
 
 ## Common follow-ups
 
