@@ -5,6 +5,7 @@ export default withMermaid({
   description: 'Notes & patterns on the way to passing the senior SWE interview',
   base: '/road-to-senior/',
   cleanUrls: true,
+  srcExclude: ['superpowers/**'],
   themeConfig: {
     search: { provider: 'local' },
     nav: [
