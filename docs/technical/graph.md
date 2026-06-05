@@ -2,7 +2,7 @@
 title: Graphs
 description: Generalised trees with cycles — DFS, BFS, adjacency list, visited set.
 tags: [dsa, graph]
-category: technical
+category: problem-solving
 status: draft
 ---
 

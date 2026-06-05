@@ -2,7 +2,7 @@
 title: Strings
 description: Frequency maps, sliding windows on strings, and common character tricks.
 tags: [dsa, strings]
-category: technical
+category: problem-solving
 status: draft
 ---
 

@@ -2,7 +2,7 @@
 title: Hashmap
 description: The universal supporting data structure — frequency, memoization, O(1) access.
 tags: [dsa, hashmap]
-category: technical
+category: problem-solving
 status: draft
 ---
 

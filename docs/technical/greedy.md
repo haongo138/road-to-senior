@@ -2,7 +2,7 @@
 title: Greedy
 description: Greedy algorithm pattern — exchange argument, sort-then-scan, and when to fall back to DP.
 tags: [dsa, greedy]
-category: technical
+category: problem-solving
 status: draft
 ---
 

@@ -2,7 +2,7 @@
 title: Prefix Sum
 description: Pre-compute cumulative sums to answer range queries in O(1).
 tags: [dsa, hashmap, prefix-sum]
-category: technical
+category: problem-solving
 status: draft
 ---
 

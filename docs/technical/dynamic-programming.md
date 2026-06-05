@@ -2,7 +2,7 @@
 title: Dynamic Programming
 description: Cache overlapping sub-problems identified by their recurrence relation.
 tags: [dsa, recursion, dp]
-category: technical
+category: problem-solving
 status: draft
 ---
 

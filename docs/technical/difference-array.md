@@ -2,7 +2,7 @@
 title: Difference Array
 description: Apply range updates in O(1); reconstruct via prefix sum.
 tags: [dsa, bonus, difference-array]
-category: technical
+category: problem-solving
 status: draft
 ---
 

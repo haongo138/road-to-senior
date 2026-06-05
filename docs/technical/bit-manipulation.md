@@ -2,7 +2,7 @@
 title: Bit Manipulation
 description: Core bitwise ops — XOR cancellation, lowest-set-bit tricks, masks, and bitmask enumeration.
 tags: [dsa, bit-manipulation]
-category: technical
+category: problem-solving
 status: draft
 ---
 

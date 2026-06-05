@@ -2,7 +2,7 @@
 title: Big-O Primer
 description: Just enough complexity analysis to reason about trade-offs in interviews.
 tags: [interview, complexity, big-o]
-category: technical
+category: problem-solving
 status: draft
 ---
 

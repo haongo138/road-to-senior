@@ -2,7 +2,7 @@
 title: DSA Roadmap
 description: My ordered path through data structures & algorithms for interviews.
 tags: [dsa, roadmap]
-category: technical
+category: problem-solving
 status: draft
 ---
 

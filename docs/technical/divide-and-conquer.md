@@ -2,7 +2,7 @@
 title: Divide and Conquer
 description: Split the problem in half, solve each half recursively, then merge.
 tags: [dsa, recursion, divide-and-conquer]
-category: technical
+category: problem-solving
 status: draft
 ---
 

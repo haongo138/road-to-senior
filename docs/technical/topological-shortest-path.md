@@ -2,7 +2,7 @@
 title: Topological Sort & Shortest Paths
 description: Kahn's algorithm for ordering DAGs; Dijkstra for weighted shortest paths.
 tags: [dsa, bonus, graph]
-category: technical
+category: problem-solving
 status: draft
 ---
 

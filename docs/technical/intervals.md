@@ -2,7 +2,7 @@
 title: Intervals
 description: Interval merging, sweep-line for peak overlap, and scheduling patterns.
 tags: [dsa, intervals]
-category: technical
+category: problem-solving
 status: draft
 ---
 

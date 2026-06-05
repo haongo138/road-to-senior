@@ -2,7 +2,7 @@
 title: Sliding Window
 description: Maintain a variable-length window that grows and shrinks to satisfy a condition.
 tags: [dsa, two-pointers, sliding-window]
-category: technical
+category: problem-solving
 status: draft
 ---
 

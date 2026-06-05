@@ -2,7 +2,7 @@
 title: Interview Process (UMPIRE)
 description: A 6-step framework so you never freeze on a new coding problem.
 tags: [interview, process, umpire]
-category: technical
+category: problem-solving
 status: draft
 ---
 

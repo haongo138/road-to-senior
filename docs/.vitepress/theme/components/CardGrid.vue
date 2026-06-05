@@ -8,7 +8,8 @@ import TagFilter from './TagFilter.vue'
 const categories = [
   { key: 'all', label: 'All' },
   { key: 'system-design', label: 'System Design' },
-  { key: 'technical', label: 'Technical' },
+  { key: 'problem-solving', label: 'Problem Solving' },
+  { key: 'tech-concepts', label: 'Tech Concepts' },
   { key: 'behavioral', label: 'Behavioral' },
   { key: 'notes', label: 'Notes' },
 ]

@@ -12,7 +12,7 @@ export interface CardItem {
   status: string
 }
 
-export const CATEGORIES = ['system-design', 'technical', 'behavioral', 'notes'] as const
+export const CATEGORIES = ['system-design', 'problem-solving', 'tech-concepts', 'behavioral', 'notes'] as const
 type Category = (typeof CATEGORIES)[number]
 
 export function isContentCard(page: RawPage): boolean {

@@ -2,7 +2,7 @@
 title: Binary Search
 description: Define what you're searching for — the validation function is the most important thing.
 tags: [dsa, binary-search]
-category: technical
+category: problem-solving
 status: draft
 ---
 

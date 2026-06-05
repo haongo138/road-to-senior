@@ -3,7 +3,7 @@ import { buildCards, filterByCategory, collectTags, type RawPage } from './cards
 
 const pages: RawPage[] = [
   { url: '/system-design/rate-limiter', frontmatter: { title: 'Rate Limiter', description: 'd', category: 'system-design', tags: ['scaling', 'api'], status: 'solid' } },
-  { url: '/technical/idempotency', frontmatter: { title: 'Idempotency', description: 'd', category: 'technical', tags: ['api'], status: 'review' } },
+  { url: '/technical/idempotency', frontmatter: { title: 'Idempotency', description: 'd', category: 'problem-solving', tags: ['api'], status: 'review' } },
   { url: '/system-design/', frontmatter: { title: 'Overview' } },
   { url: '/', frontmatter: { layout: 'home' } },
 ]
@@ -27,7 +27,7 @@ describe('filterByCategory', () => {
     expect(filterByCategory(buildCards(pages), 'all')).toHaveLength(2)
   })
   it('filters to a single category', () => {
-    const only = filterByCategory(buildCards(pages), 'technical')
+    const only = filterByCategory(buildCards(pages), 'problem-solving')
     expect(only.map((c) => c.url)).toEqual(['/technical/idempotency'])
   })
 })

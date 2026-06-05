@@ -2,7 +2,7 @@
 title: Trees & Recursion
 description: The gateway to the recursion family — base cases, recurrence relations, DFS & BFS.
 tags: [dsa, recursion, tree]
-category: technical
+category: problem-solving
 status: draft
 ---
 

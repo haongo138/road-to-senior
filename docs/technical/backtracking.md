@@ -2,7 +2,7 @@
 title: Backtracking
 description: Systematically explore all candidates and prune invalid branches early.
 tags: [dsa, recursion, backtracking]
-category: technical
+category: problem-solving
 status: draft
 ---
 

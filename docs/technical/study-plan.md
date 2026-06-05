@@ -2,7 +2,7 @@
 title: Study Plan
 description: Time-boxed roadmaps and a curated must-do problem set for interview prep.
 tags: [interview, study-plan]
-category: technical
+category: problem-solving
 status: draft
 ---
 

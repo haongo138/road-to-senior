@@ -2,7 +2,7 @@
 title: Heap & Stack
 description: Top is the most important thing — find the logic with respect to the top element.
 tags: [dsa, heap, stack]
-category: technical
+category: problem-solving
 status: draft
 ---
 

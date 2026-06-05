@@ -10,7 +10,13 @@ export default withMermaid({
     search: { provider: 'local' },
     nav: [
       { text: 'System Design', link: '/system-design/' },
-      { text: 'Technical', link: '/technical/' },
+      {
+        text: 'Technical',
+        items: [
+          { text: 'Problem Solving', link: '/technical/dsa-roadmap' },
+          { text: 'Tech Concepts', link: '/technical/concepts' },
+        ],
+      },
       { text: 'Behavioral', link: '/behavioral/' },
       { text: 'Notes', link: '/notes/' },
       { text: 'Tags', link: '/tags' },
@@ -30,7 +36,16 @@ export default withMermaid({
       ],
       '/technical/': [
         {
-          text: 'Interview Method',
+          text: 'Technical',
+          items: [
+            { text: 'Overview', link: '/technical/' },
+            { text: 'Problem Solving', link: '/technical/dsa-roadmap' },
+            { text: 'Tech Concepts', link: '/technical/concepts' },
+          ],
+        },
+        {
+          text: 'Problem Solving · Interview Method',
+          collapsed: true,
           items: [
             { text: 'Interview Process (UMPIRE)', link: '/technical/interview-process' },
             { text: 'Communication & Whiteboard', link: '/technical/communication' },
@@ -39,15 +54,8 @@ export default withMermaid({
           ],
         },
         {
-          text: 'Technical Patterns',
-          items: [
-            { text: 'Overview', link: '/technical/' },
-            { text: 'DSA Roadmap', link: '/technical/dsa-roadmap' },
-            { text: 'Idempotency Keys', link: '/technical/idempotency' },
-          ],
-        },
-        {
-          text: 'DSA Roadmap',
+          text: 'Problem Solving · DSA Roadmap',
+          collapsed: true,
           items: [
             { text: 'Trees & Recursion', link: '/technical/tree' },
             { text: 'Backtracking', link: '/technical/backtracking' },
@@ -67,13 +75,54 @@ export default withMermaid({
           ],
         },
         {
-          text: 'Bonus (if time)',
+          text: 'Problem Solving · Bonus',
+          collapsed: true,
           items: [
             { text: 'Difference Array', link: '/technical/difference-array' },
             { text: 'Trie', link: '/technical/trie' },
             { text: 'Union-Find (DSU)', link: '/technical/union-find' },
             { text: 'Bit Manipulation', link: '/technical/bit-manipulation' },
             { text: 'Topological & Shortest Paths', link: '/technical/topological-shortest-path' },
+          ],
+        },
+        {
+          text: 'Tech Concepts · Concurrency & Reliability',
+          collapsed: true,
+          items: [
+            { text: 'Transactional Outbox', link: '/technical/outbox' },
+            { text: 'Saga Pattern', link: '/technical/saga' },
+            { text: 'Two-Phase Commit', link: '/technical/two-phase-commit' },
+            { text: 'Change Data Capture', link: '/technical/change-data-capture' },
+            { text: 'Idempotency Keys', link: '/technical/idempotency' },
+          ],
+        },
+        {
+          text: 'Tech Concepts · Databases',
+          collapsed: true,
+          items: [
+            { text: 'Database Indexing', link: '/technical/db-indexing' },
+            { text: 'Transactions & Isolation', link: '/technical/transactions-isolation' },
+            { text: 'Normalization', link: '/technical/normalization' },
+            { text: 'Sharding & Replication', link: '/technical/sharding-replication' },
+            { text: 'SQL vs NoSQL', link: '/technical/sql-vs-nosql' },
+          ],
+        },
+        {
+          text: 'Tech Concepts · Caching',
+          collapsed: true,
+          items: [
+            { text: 'Cache Strategies', link: '/technical/cache-strategies' },
+            { text: 'Cache Invalidation & Eviction', link: '/technical/cache-invalidation' },
+          ],
+        },
+        {
+          text: 'Tech Concepts · Messaging & Consistency',
+          collapsed: true,
+          items: [
+            { text: 'Queues vs Streams', link: '/technical/queues-vs-streams' },
+            { text: 'Delivery Semantics', link: '/technical/delivery-semantics' },
+            { text: 'CAP Theorem', link: '/technical/cap-theorem' },
+            { text: 'Eventual Consistency', link: '/technical/eventual-consistency' },
           ],
         },
       ],

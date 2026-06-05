@@ -1,11 +1,11 @@
 ---
-title: Technical Patterns
+title: Technical
 ---
 
-# Technical Patterns
+# Technical
 
-Coding, data structures & algorithms, concurrency, API design, and testing idioms.
+Two tracks for senior SWE interview prep:
 
-The main learning path for DSA is the [DSA Roadmap](./dsa-roadmap) — an ordered sequence of topics building from trees and recursion through to binary search, with a bonus section for advanced structures.
+**Problem Solving** covers data structures, algorithms, and interview method. Start with the [DSA Roadmap](./dsa-roadmap) and the [Interview Process (UMPIRE)](./interview-process).
 
-New here? Start with the [DSA Roadmap](./dsa-roadmap) and the [Interview Process (UMPIRE)](./interview-process).
+**Technical Concepts** is the knowledge round — concept Q&A on databases, caching, messaging, and distributed systems. Browse the [Technical Concepts hub](./concepts).

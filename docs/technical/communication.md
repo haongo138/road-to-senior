@@ -2,7 +2,7 @@
 title: Communication & Whiteboard
 description: How to talk through a problem and present code under observation.
 tags: [interview, communication]
-category: technical
+category: problem-solving
 status: draft
 ---
 

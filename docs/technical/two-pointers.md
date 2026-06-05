@@ -2,7 +2,7 @@
 title: Two Pointers
 description: The main technique for sub-array conditions — slow/fast or opposite-ends pointers.
 tags: [dsa, two-pointers]
-category: technical
+category: problem-solving
 status: draft
 ---
 

@@ -2,7 +2,7 @@
 title: Linked List
 description: Core linked-list patterns — dummy head, fast/slow pointers, in-place reversal, and merging.
 tags: [dsa, linked-list]
-category: technical
+category: problem-solving
 status: draft
 ---
 

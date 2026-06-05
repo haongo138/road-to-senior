@@ -2,7 +2,7 @@
 title: Union-Find (DSU)
 description: Disjoint Set Union with path compression and union by rank for near-O(1) connectivity.
 tags: [dsa, bonus, union-find]
-category: technical
+category: problem-solving
 status: draft
 ---
 

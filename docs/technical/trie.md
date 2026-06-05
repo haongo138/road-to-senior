@@ -2,7 +2,7 @@
 title: Trie
 description: Prefix tree for fast word and prefix lookup.
 tags: [dsa, bonus, trie]
-category: technical
+category: problem-solving
 status: draft
 ---
 
