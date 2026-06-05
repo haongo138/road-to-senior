@@ -13,8 +13,8 @@ export default withMermaid({
       {
         text: 'Technical',
         items: [
-          { text: 'Problem Solving', link: '/technical/dsa-roadmap' },
-          { text: 'Tech Concepts', link: '/technical/concepts' },
+          { text: 'Problem Solving', link: '/technical/problem-solving/dsa-roadmap' },
+          { text: 'Tech Concepts', link: '/technical/concepts/concepts' },
         ],
       },
       { text: 'Behavioral', link: '/behavioral/' },
@@ -34,95 +34,107 @@ export default withMermaid({
           ],
         },
       ],
+      '/technical/problem-solving/': [
+        {
+          text: 'Problem Solving',
+          items: [
+            { text: 'DSA Roadmap', link: '/technical/problem-solving/dsa-roadmap' },
+            { text: '↩ Technical home', link: '/technical/' },
+          ],
+        },
+        {
+          text: 'Interview Method',
+          items: [
+            { text: 'Interview Process (UMPIRE)', link: '/technical/problem-solving/interview-process' },
+            { text: 'Communication & Whiteboard', link: '/technical/problem-solving/communication' },
+            { text: 'Big-O Primer', link: '/technical/problem-solving/big-o' },
+            { text: 'Study Plan', link: '/technical/problem-solving/study-plan' },
+          ],
+        },
+        {
+          text: 'DSA Roadmap',
+          items: [
+            { text: 'Trees & Recursion', link: '/technical/problem-solving/tree' },
+            { text: 'Backtracking', link: '/technical/problem-solving/backtracking' },
+            { text: 'Dynamic Programming', link: '/technical/problem-solving/dynamic-programming' },
+            { text: 'Divide and Conquer', link: '/technical/problem-solving/divide-and-conquer' },
+            { text: 'Graphs', link: '/technical/problem-solving/graph' },
+            { text: 'Linked List', link: '/technical/problem-solving/linked-list' },
+            { text: 'Hashmap', link: '/technical/problem-solving/hashmap' },
+            { text: 'Prefix Sum', link: '/technical/problem-solving/prefix-sum' },
+            { text: 'Strings', link: '/technical/problem-solving/strings' },
+            { text: 'Sliding Window', link: '/technical/problem-solving/sliding-window' },
+            { text: 'Two Pointers', link: '/technical/problem-solving/two-pointers' },
+            { text: 'Intervals', link: '/technical/problem-solving/intervals' },
+            { text: 'Heap & Stack', link: '/technical/problem-solving/heap-stack' },
+            { text: 'Greedy', link: '/technical/problem-solving/greedy' },
+            { text: 'Binary Search', link: '/technical/problem-solving/binary-search' },
+          ],
+        },
+        {
+          text: 'Bonus (if time)',
+          collapsed: true,
+          items: [
+            { text: 'Difference Array', link: '/technical/problem-solving/difference-array' },
+            { text: 'Trie', link: '/technical/problem-solving/trie' },
+            { text: 'Union-Find (DSU)', link: '/technical/problem-solving/union-find' },
+            { text: 'Bit Manipulation', link: '/technical/problem-solving/bit-manipulation' },
+            { text: 'Topological & Shortest Paths', link: '/technical/problem-solving/topological-shortest-path' },
+          ],
+        },
+      ],
+      '/technical/concepts/': [
+        {
+          text: 'Technical Concepts',
+          items: [
+            { text: 'Overview', link: '/technical/concepts/concepts' },
+            { text: '↩ Technical home', link: '/technical/' },
+          ],
+        },
+        {
+          text: 'Concurrency & Reliability',
+          items: [
+            { text: 'Transactional Outbox', link: '/technical/concepts/outbox' },
+            { text: 'Saga Pattern', link: '/technical/concepts/saga' },
+            { text: 'Two-Phase Commit', link: '/technical/concepts/two-phase-commit' },
+            { text: 'Change Data Capture', link: '/technical/concepts/change-data-capture' },
+            { text: 'Idempotency Keys', link: '/technical/concepts/idempotency' },
+          ],
+        },
+        {
+          text: 'Databases',
+          items: [
+            { text: 'Database Indexing', link: '/technical/concepts/db-indexing' },
+            { text: 'Transactions & Isolation', link: '/technical/concepts/transactions-isolation' },
+            { text: 'Normalization', link: '/technical/concepts/normalization' },
+            { text: 'Sharding & Replication', link: '/technical/concepts/sharding-replication' },
+            { text: 'SQL vs NoSQL', link: '/technical/concepts/sql-vs-nosql' },
+          ],
+        },
+        {
+          text: 'Caching',
+          items: [
+            { text: 'Cache Strategies', link: '/technical/concepts/cache-strategies' },
+            { text: 'Cache Invalidation & Eviction', link: '/technical/concepts/cache-invalidation' },
+          ],
+        },
+        {
+          text: 'Messaging & Consistency',
+          items: [
+            { text: 'Queues vs Streams', link: '/technical/concepts/queues-vs-streams' },
+            { text: 'Delivery Semantics', link: '/technical/concepts/delivery-semantics' },
+            { text: 'CAP Theorem', link: '/technical/concepts/cap-theorem' },
+            { text: 'Eventual Consistency', link: '/technical/concepts/eventual-consistency' },
+          ],
+        },
+      ],
       '/technical/': [
         {
           text: 'Technical',
           items: [
             { text: 'Overview', link: '/technical/' },
-            { text: 'Problem Solving', link: '/technical/dsa-roadmap' },
-            { text: 'Tech Concepts', link: '/technical/concepts' },
-          ],
-        },
-        {
-          text: 'Problem Solving · Interview Method',
-          collapsed: true,
-          items: [
-            { text: 'Interview Process (UMPIRE)', link: '/technical/interview-process' },
-            { text: 'Communication & Whiteboard', link: '/technical/communication' },
-            { text: 'Big-O Primer', link: '/technical/big-o' },
-            { text: 'Study Plan', link: '/technical/study-plan' },
-          ],
-        },
-        {
-          text: 'Problem Solving · DSA Roadmap',
-          collapsed: true,
-          items: [
-            { text: 'Trees & Recursion', link: '/technical/tree' },
-            { text: 'Backtracking', link: '/technical/backtracking' },
-            { text: 'Dynamic Programming', link: '/technical/dynamic-programming' },
-            { text: 'Divide and Conquer', link: '/technical/divide-and-conquer' },
-            { text: 'Graphs', link: '/technical/graph' },
-            { text: 'Linked List', link: '/technical/linked-list' },
-            { text: 'Hashmap', link: '/technical/hashmap' },
-            { text: 'Prefix Sum', link: '/technical/prefix-sum' },
-            { text: 'Strings', link: '/technical/strings' },
-            { text: 'Sliding Window', link: '/technical/sliding-window' },
-            { text: 'Two Pointers', link: '/technical/two-pointers' },
-            { text: 'Intervals', link: '/technical/intervals' },
-            { text: 'Heap & Stack', link: '/technical/heap-stack' },
-            { text: 'Greedy', link: '/technical/greedy' },
-            { text: 'Binary Search', link: '/technical/binary-search' },
-          ],
-        },
-        {
-          text: 'Problem Solving · Bonus',
-          collapsed: true,
-          items: [
-            { text: 'Difference Array', link: '/technical/difference-array' },
-            { text: 'Trie', link: '/technical/trie' },
-            { text: 'Union-Find (DSU)', link: '/technical/union-find' },
-            { text: 'Bit Manipulation', link: '/technical/bit-manipulation' },
-            { text: 'Topological & Shortest Paths', link: '/technical/topological-shortest-path' },
-          ],
-        },
-        {
-          text: 'Tech Concepts · Concurrency & Reliability',
-          collapsed: true,
-          items: [
-            { text: 'Transactional Outbox', link: '/technical/outbox' },
-            { text: 'Saga Pattern', link: '/technical/saga' },
-            { text: 'Two-Phase Commit', link: '/technical/two-phase-commit' },
-            { text: 'Change Data Capture', link: '/technical/change-data-capture' },
-            { text: 'Idempotency Keys', link: '/technical/idempotency' },
-          ],
-        },
-        {
-          text: 'Tech Concepts · Databases',
-          collapsed: true,
-          items: [
-            { text: 'Database Indexing', link: '/technical/db-indexing' },
-            { text: 'Transactions & Isolation', link: '/technical/transactions-isolation' },
-            { text: 'Normalization', link: '/technical/normalization' },
-            { text: 'Sharding & Replication', link: '/technical/sharding-replication' },
-            { text: 'SQL vs NoSQL', link: '/technical/sql-vs-nosql' },
-          ],
-        },
-        {
-          text: 'Tech Concepts · Caching',
-          collapsed: true,
-          items: [
-            { text: 'Cache Strategies', link: '/technical/cache-strategies' },
-            { text: 'Cache Invalidation & Eviction', link: '/technical/cache-invalidation' },
-          ],
-        },
-        {
-          text: 'Tech Concepts · Messaging & Consistency',
-          collapsed: true,
-          items: [
-            { text: 'Queues vs Streams', link: '/technical/queues-vs-streams' },
-            { text: 'Delivery Semantics', link: '/technical/delivery-semantics' },
-            { text: 'CAP Theorem', link: '/technical/cap-theorem' },
-            { text: 'Eventual Consistency', link: '/technical/eventual-consistency' },
+            { text: 'Problem Solving', link: '/technical/problem-solving/dsa-roadmap' },
+            { text: 'Tech Concepts', link: '/technical/concepts/concepts' },
           ],
         },
       ],
