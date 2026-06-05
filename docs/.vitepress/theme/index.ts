@@ -1,5 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import type { Theme } from 'vitepress'
+import '@fontsource-variable/dm-sans/index.css'
 import CardGrid from './components/CardGrid.vue'
 import TagsPage from './components/TagsPage.vue'
 import './custom.css'
