@@ -143,6 +143,15 @@ export default withMermaid({
           ],
         },
         {
+          text: 'OOP & Design',
+          collapsed: true,
+          items: [
+            { text: 'SOLID & OOP', link: '/technical/concepts/solid-and-oop' },
+            { text: 'Cohesion & Coupling', link: '/technical/concepts/cohesion-coupling' },
+            { text: 'Composition over Inheritance', link: '/technical/concepts/composition-over-inheritance' },
+          ],
+        },
+        {
           text: 'Go (Golang) · Concurrency',
           collapsed: true,
           items: [

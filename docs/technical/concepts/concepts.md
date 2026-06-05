@@ -47,6 +47,12 @@ Interviewers test whether you understand *why* systems are designed the way they
 - [OpenID Connect (OIDC)](./openid-connect)
 - [Access & Refresh Tokens](./access-refresh-tokens)
 
+## OOP & Design
+
+- [SOLID & OOP](./solid-and-oop)
+- [Cohesion & Coupling](./cohesion-coupling)
+- [Composition over Inheritance](./composition-over-inheritance)
+
 ## Go (Golang) · Concurrency
 
 - [Goroutines & the Scheduler](./go-goroutines-scheduler)
