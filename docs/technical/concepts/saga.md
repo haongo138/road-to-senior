@@ -10,37 +10,46 @@ status: draft
 
 > **Q: What problem does the Saga pattern solve?**
 
-A business transaction that spans multiple services (e.g., reserve inventory → charge payment → create shipment) cannot be wrapped in a single ACID transaction because each service owns its own database. Without coordination, a failure mid-way leaves the system in a partially applied state. The Saga pattern provides a structured way to manage such multi-step workflows without requiring a distributed transaction.
+A business workflow spanning multiple services — reserve inventory → charge payment → create shipment — cannot be wrapped in a single ACID transaction because each service owns its own database. A failure mid-way leaves the system partially applied, with no built-in rollback mechanism. [2PC](./two-phase-commit) could enforce atomicity, but it blocks on coordinator failure and kills throughput under contention. Sagas coordinate the workflow without a distributed lock: each step commits locally and the Saga handles failure by running compensating actions.
 
 > **Q: What is a Saga?**
 
-A Saga is a sequence of **local transactions**, one per participating service. Each step publishes an event or sends a command to trigger the next step. If any step fails, previously completed steps are undone by executing their **compensating transactions** in reverse order. Compensations must be defined up front for every step that can be rolled back.
+A Saga is a sequence of **local transactions**, one per participating service. Each step publishes an event or sends a command to trigger the next step. If step *N* fails, the Saga runs compensating transactions for steps *N-1* through *1* in reverse. Every step that can fail must have a defined compensation, and that compensation must itself be idempotent and retryable — a compensation that can fail is just another failure mode you haven't handled yet.
 
-> **Q: What is the difference between choreography and orchestration in a Saga?**
+> **Q: Choreography vs. orchestration — when does each make sense?**
 
-**Choreography**: Each service listens for events from the previous step and reacts by executing its local transaction and emitting a new event. There is no central coordinator — services are loosely coupled, but the overall flow is implicit and harder to trace as the number of services grows.
+**Choreography**: Each service listens for events and reacts autonomously. No central coordinator; services are loosely coupled. Works well for simple linear flows (3–4 services). As complexity grows the implicit flow becomes unobservable — debugging a stuck Saga requires reconstructing state from events across multiple services' logs.
 
-**Orchestration**: A dedicated **orchestrator** (a workflow service or state machine) explicitly commands each participant service in sequence, waits for responses, and drives compensations on failure. The flow is explicit and observable in one place, but the orchestrator becomes a central point of logic.
+**Orchestration**: A dedicated orchestrator (state machine or workflow engine like Temporal, Conductor, or AWS Step Functions) commands each participant in sequence, tracks state explicitly, and drives compensations on failure. The flow is visible in one place and retries are centrally managed. Cost: the orchestrator becomes a shared-state dependency that all participants couple to.
+
+For production systems with more than ~4 services or non-linear flows (fan-out, conditional branches), orchestration almost always wins on operability.
 
 > **Q: How do Sagas handle isolation? What risks does the lack of ACID isolation create?**
 
-Sagas do **not** provide full ACID isolation. Intermediate states are visible to other transactions while a Saga is in progress. This can cause dirty reads across services. Mitigations include:
+Sagas provide **no inter-saga isolation**. While a Saga is in progress, intermediate state is committed locally and visible to concurrent requests. This enables several anomalies:
 
-- **Semantic locks**: mark a record as "pending" so other operations know to wait or fail fast.
-- **Commutative updates**: design operations so their order does not affect the final result.
-- **Pivot transactions**: identify the point of no return and build compensations only for pre-pivot steps.
+- **Dirty reads across services**: A second Saga reads inventory "reserved" by a first Saga that later compensates. The second Saga acts on data that no longer holds.
+- **Lost updates**: Two concurrent Sagas both read the same balance and both decrement it — one deduction is silently lost.
+- **Compensation cascades**: If a compensation fails (e.g., the payment provider rejects the refund API call), the Saga gets stuck in a partially-compensated state. You need a retry strategy, a dead-letter mechanism, and probably a human-in-the-loop alert.
 
-> **Q: When would you choose a Saga over Two-Phase Commit (2PC)?**
+Mitigations:
+- **Semantic locks**: mark records as "pending" at step 1; other operations observe the lock and either wait or fail fast.
+- **Commutative updates**: design steps so order of application does not affect the final result, making concurrency safe.
+- **Pivot transactions**: the point of no return — build compensations only for pre-pivot steps; post-pivot steps are expected to succeed or retry forward.
 
-Choose a Saga when services own separate databases and you need availability over strong consistency. [2PC](./two-phase-commit) provides true atomicity but blocks if the coordinator crashes and reduces throughput under high contention. Sagas trade ACID isolation for availability and resilience, which is the right trade-off for most microservice architectures. Use 2PC only when participating resources support it (e.g., same RDBMS or XA-capable systems) and blocking is acceptable.
+> **Q: When would you choose a Saga over 2PC?**
+
+Almost always in a microservices architecture. [2PC](./two-phase-commit) requires participants to hold locks across a network round-trip, blocks if the coordinator crashes, and is unavailable to any service running its own database. Sagas trade ACID isolation for availability and horizontal scalability — the right trade-off when each service owns its data.
+
+Reach for 2PC only when all participants are XA-capable resources in a controlled environment (same data center, reliable network) and the consistency requirement is so strict that you cannot accept even momentary partial state. That scenario is increasingly rare.
 
 > **Q: How does the Outbox pattern relate to Sagas?**
 
-Each Saga step typically uses the [Transactional Outbox](./outbox) to reliably emit the event or command that triggers the next step. Without the Outbox, the local transaction and the message publish are a dual-write, which can silently drop messages and stall the Saga.
+Each Saga step should use the [Transactional Outbox](./outbox) to emit the event or command that triggers the next step. Without the Outbox, the local DB write and the broker publish are a dual-write: if the publish fails after the commit, the Saga stalls with no retry mechanism. With the Outbox, the relay guarantees at-least-once delivery of the trigger, and each step's idempotency key prevents double execution on retries.
 
 ## Common follow-ups
 
-- How do you implement a compensating transaction for a payment that has already settled?
-- How do you observe or debug a choreography-based Saga in production?
-- What happens if a compensation itself fails — how do you handle "stuck" Sagas?
-- How does an orchestrator handle idempotency when it retries a failed step?
+- How do you implement a compensating transaction for a payment that has already settled with a third-party processor?
+- How do you observe or debug a choreography-based Saga in production when a step silently drops an event?
+- What happens if a compensation itself fails — how do you handle "stuck" Sagas and when do you escalate to a human?
+- How does an orchestrator handle idempotency when it retries a failed step command?

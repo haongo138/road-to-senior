@@ -8,55 +8,62 @@ status: draft
 
 # Database Indexing
 
-> **Q: What is a database index?**
+> **Q: What is a database index and what does it cost?**
 
-An index is a separate data structure maintained by the database that maps key values to the physical location (page/row) of matching rows. Reading the index is far cheaper than scanning every row in a table. The trade-off: every write (INSERT, UPDATE, DELETE) must also update all relevant indexes, adding overhead.
+An index is a separate data structure that maps key values to row locations, making targeted reads O(log n) instead of O(n). The hidden price: every write (INSERT, UPDATE, DELETE) must update every relevant index synchronously — adding CPU, I/O, and write amplification. A table with 8 indexes on a high-write path may spend more time maintaining indexes than writing the actual row. Index count is a write-throughput lever, not just a read-speed lever.
 
-> **Q: How does a B-tree (B+-tree) index work, and why is it the default?**
+> **Q: How does a B+-tree index work, and why is it the default?**
 
-A B+-tree stores keys in sorted order across a balanced tree of pages. Internal nodes hold separator keys for routing; leaf nodes hold the actual key + row pointer and are linked in a doubly-linked list. This design gives O(log n) lookups and efficient **range scans** (follow the leaf chain). Because most queries involve ranges, ordering, or inequality predicates, B+-tree is the default index type in PostgreSQL, MySQL InnoDB, and SQL Server.
+Internal nodes hold separator keys for routing; leaf nodes store key + row pointer and are linked as a doubly-linked list. This gives O(log n) point lookups and efficient range scans (walk the leaf chain without re-traversing the tree). Because most production queries use ranges, `ORDER BY`, or inequality predicates, B+-tree is the default in PostgreSQL, MySQL InnoDB, and SQL Server.
+
+B+-trees do have a write cost: inserts and deletes can trigger page splits or merges, and heavy random writes cause **index bloat** — pages become sparsely filled, wasting disk and cache. After a bulk delete you should run `VACUUM` (Postgres) or `OPTIMIZE TABLE` (MySQL) to reclaim space.
+
+Write-heavy stores like Cassandra and RocksDB use **LSM-trees** instead: writes land in a memory buffer and are merged to disk in sorted runs. LSM trades random-write performance for higher read amplification; it suits append-heavy workloads where sequential writes dominate.
 
 > **Q: When would you use a hash index instead?**
 
-Hash indexes compute a hash of the key and store (hash → row location) in a hash table. Lookups are O(1) for **exact-equality** predicates (`WHERE id = 42`). However, they cannot support range queries (`>`, `<`, `BETWEEN`), ORDER BY, or prefix matching. PostgreSQL supports explicit hash indexes; MySQL InnoDB does not persist them on disk. Use them only when all access is equality-only and O(1) matters.
+Hash indexes are O(1) for exact equality (`WHERE id = 42`) but cannot support ranges, `ORDER BY`, or prefix matching. PostgreSQL supports on-disk hash indexes; MySQL InnoDB does not persist them. In practice, B+-tree equality lookups are O(log n) ≈ 3–5 page reads on a table of tens of millions of rows — negligible. Use hash indexes only when equality-only access is proven and O(1) is measurably necessary.
 
 > **Q: What is the leftmost-prefix rule for composite indexes?**
 
-A composite index on `(a, b, c)` can be used by queries that filter on:
-- `a` alone
-- `a, b`
-- `a, b, c`
-
-But **not** on `b` alone or `c` alone, because the index is sorted first by `a`, then by `b` within each `a` value, etc. A query on just `b` would require a full index scan. Column order in the index definition matters: put the most selective or most commonly filtered columns first.
+A composite index on `(a, b, c)` is sorted first by `a`, then `b` within each `a`, then `c`. Queries that don't anchor on `a` cannot seek into the index; the planner falls back to a full scan.
 
 ```sql
 -- Index: (last_name, first_name)
-SELECT * FROM users WHERE last_name = 'Smith';          -- uses index ✓
+SELECT * FROM users WHERE last_name = 'Smith';               -- seeks ✓
 SELECT * FROM users WHERE last_name = 'Smith'
-                      AND first_name = 'Jane';          -- uses both columns ✓
-SELECT * FROM users WHERE first_name = 'Jane';          -- cannot use index ✗
+                      AND first_name = 'Jane';               -- seeks both columns ✓
+SELECT * FROM users WHERE first_name = 'Jane';               -- full scan ✗
 ```
 
-> **Q: What is a covering index?**
+Column order matters beyond just leading columns: if the query filters `a` (equality) and ranges on `b`, columns used in equality should come first so the range column can still be used for scanning. Getting this wrong wastes the index entirely.
 
-A covering index includes all columns a query needs — both the filter columns and the SELECT columns. The database can answer the query entirely from the index without touching the base table ("index-only scan"). This eliminates the extra I/O of fetching actual rows.
+> **Q: What is a covering index and when does it become an index-only scan?**
+
+A covering index includes every column the query touches (filter, select, and sort). The planner can satisfy the query from the index alone — an **index-only scan** — eliminating the extra heap fetches for each matching row. This can reduce query latency by 10× on hot read paths.
 
 ```sql
--- Index on (user_id, created_at, status) covers this query:
+-- Index on (user_id, created_at, status) covers this query completely:
 SELECT created_at, status FROM orders WHERE user_id = 7;
 ```
 
+In PostgreSQL, index-only scans still check the visibility map (to verify rows are visible to the current snapshot). If the table is rarely vacuumed, the visibility map is stale and heap fetches happen anyway — defeating the purpose. Monitor `pg_stat_user_tables.n_live_tup` and autovacuum lag.
+
 > **Q: When does the query planner ignore an index?**
 
-- **Low selectivity**: indexing a boolean column where 90 % of rows are `TRUE` — a full scan is cheaper.
-- **Function applied to the indexed column**: `WHERE LOWER(email) = 'a@b.com'` skips an index on `email`; create a functional index instead.
-- **Leading wildcard**: `LIKE '%smith'` cannot use a B-tree index (no known prefix to seek to).
-- **Small tables**: the planner prefers a sequential scan when the table fits in a few pages.
-- **Implicit type cast**: comparing a `VARCHAR` column against an integer causes a cast that hides the index.
+- **Low selectivity / cardinality**: an index on a boolean `is_active` where 95 % of rows are `TRUE` — the planner estimates a sequential scan is cheaper because it avoids random I/O for each row pointer. Selectivity threshold is roughly 5–15 % of rows, depending on the planner's cost model.
+- **Function applied to the indexed column**: `WHERE LOWER(email) = 'a@b.com'` bypasses an index on `email`; create a functional index `ON users (LOWER(email))` instead.
+- **Leading wildcard**: `LIKE '%smith'` has no known prefix to seek to. Full-text search or reverse-index patterns solve this.
+- **Implicit type cast**: comparing `VARCHAR` against an integer causes an implicit cast that hides the index from the planner.
+- **Small tables**: the optimizer prefers sequential scan when the table fits in a handful of pages — random index I/O costs more.
+- **Stale statistics**: `ANALYZE` updates the statistics the planner uses; without it, cardinality estimates are wrong and the planner may choose a bad plan.
+
+Confirm with `EXPLAIN ANALYZE`: look at `rows=` estimate vs. actual, and watch for `Seq Scan` where you expect `Index Scan`.
 
 ## Common follow-ups
 
-- How would you find slow queries that are missing indexes in PostgreSQL? (`pg_stat_user_tables`, `EXPLAIN ANALYZE`)
-- What is a partial index and when would you use one?
-- How do you avoid index bloat after heavy deletes?
-- What is the difference between a clustered index and a non-clustered index?
+- How would you find slow queries missing indexes in PostgreSQL? (`pg_stat_user_tables`, `pg_stat_statements`, `EXPLAIN ANALYZE`)
+- What is a partial index and when does it beat a full index? (e.g., `WHERE deleted_at IS NULL`)
+- How do you reclaim index bloat after heavy deletes? (`REINDEX CONCURRENTLY`, `VACUUM`)
+- Clustered (InnoDB primary key / Postgres `CLUSTER`) vs. non-clustered: when does physical row order matter for range scans?
+- How do write-heavy workloads change your index strategy? (LSM-tree, fewer indexes, delayed index builds)

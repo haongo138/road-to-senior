@@ -13,45 +13,52 @@ status: draft
 | | Replication | Sharding (horizontal partitioning) |
 |---|---|---|
 | **What it does** | Copies the **same** data to multiple nodes | Splits **different** data across multiple nodes |
-| **Primary goal** | Read scaling + high availability (HA) | Write scaling + storage scaling |
+| **Primary goal** | Read scaling + high availability | Write scaling + storage scaling |
 | **Each node holds** | Full dataset | A subset (shard) of the dataset |
-| **Failure impact** | Replicas take over if leader fails | Loss of a shard means loss of that data partition |
+| **Failure impact** | Replicas take over if leader fails | Loss of a shard means loss of that partition's data |
 
-They are complementary: production systems often replicate each shard.
+They are complementary — production systems typically replicate each shard for availability. Reach for replication first; it's far simpler. Shard only when a single machine's write throughput or storage is genuinely exhausted.
 
-> **Q: How does leader-follower (primary-replica) replication work, and what is replication lag?**
+> **Q: How does leader-follower replication work, and what are the durability and lag trade-offs?**
 
-The leader accepts all writes. Changes are written to a **write-ahead log (WAL)** or binlog and streamed to followers, which apply them asynchronously. Followers serve read queries.
+The leader accepts all writes, appends them to a write-ahead log (WAL) or binlog, and streams changes to followers. Followers replay the log and serve reads.
 
-- **Synchronous replication**: the leader waits for at least one follower to confirm before acknowledging the write. Stronger durability, higher write latency.
-- **Asynchronous replication**: the leader acknowledges immediately; followers catch up on their own schedule. Lower latency, but followers may lag — serving stale data.
+- **Synchronous replication**: the leader waits for at least one follower to acknowledge before confirming the write. Stronger durability (you won't lose a committed write if the leader dies immediately after), but every write waits for a network round-trip — typically 1–5 ms on LAN, much more across regions.
+- **Asynchronous replication**: the leader acknowledges immediately; followers catch up independently. Lower write latency, but a leader failure between a write and follower replay loses that write. Most cloud-managed databases (RDS, Cloud SQL) default to async with optional semi-sync.
 
-**Replication lag** is the delay between a write on the leader and its appearance on followers. This causes the **read-your-writes problem**: a user writes data, then reads from a stale replica and doesn't see their own change. Mitigations: route reads for the same user to the leader for a short window, or track a replication position per session.
+**Replication lag** is the delay before a committed write appears on followers — it can range from milliseconds to minutes under load. This creates the **read-your-writes** problem: a user writes data, then reads from a stale replica and doesn't see their own change. Mitigation strategies: route reads to the leader for a short window after a write, track the replication position (LSN) per session and stall reads on replicas that haven't caught up, or use sticky sessions. Lag is a metric you must monitor — sudden spikes often precede follower divergence.
 
-> **Q: What are the common sharding strategies?**
+> **Q: What are the common sharding strategies and their failure modes?**
 
 | Strategy | How it works | Pros | Cons |
 |---|---|---|---|
-| **Range sharding** | Split by key range (e.g., user IDs 1–1M on shard 1) | Simple, good for range queries | Hotspots if writes concentrate in one range (e.g., monotonically increasing IDs) |
-| **Hash sharding** | `shard = hash(key) % N` | Even distribution, no hotspots for random keys | Range queries scatter across all shards; rebalancing requires rehashing |
-| **Directory sharding** | A lookup table maps each key to a shard | Flexible, supports arbitrary mapping | Lookup table is a single point of failure; overhead per request |
+| **Range sharding** | Split by key range (e.g., user IDs 1–1M → shard 1) | Simple; good for range queries | Hotspots when writes concentrate in one range (e.g., monotonically increasing IDs or timestamps) |
+| **Hash sharding** | `shard = hash(key) % N` | Even key distribution; no sequential hotspots | Range queries scatter across all shards; rebalancing requires rehashing most keys |
+| **Directory sharding** | Lookup table maps each key to a shard | Fully flexible; supports arbitrary mapping | Lookup table is a single point of failure and a network hop per request |
 
-> **Q: What is the hotspot / celebrity problem in sharding?**
+The shard key decision is effectively irreversible without expensive data migration. Choose it based on your dominant query pattern — the key that keeps the most frequent queries within a single shard.
 
-If your shard key is a user ID and one user (a celebrity) generates vastly more traffic than others, their shard becomes a bottleneck. Solutions: use a compound shard key that spreads the celebrity's data, add an artificial prefix to the key, or cache heavily accessed records separately. The underlying issue is that hash sharding distributes keys evenly but not necessarily load evenly.
+> **Q: What is the hotspot / celebrity problem and how do you address it?**
 
-> **Q: What is consistent hashing and why does it help?**
+Hash sharding distributes keys evenly but not load evenly. A single celebrity user or viral event can drive orders of magnitude more traffic to one shard than others. A uniform key hash doesn't help — the key appears once, but each request hashes to the same shard.
 
-Standard hash sharding (`hash(key) % N`) requires remapping almost every key when a shard is added or removed. **Consistent hashing** arranges nodes and keys on a virtual ring. When a node is added or removed, only the keys in the adjacent arc need to migrate — roughly `K/N` keys instead of almost all of them. This makes rebalancing far less disruptive. It is the basis for Cassandra's partitioning and many distributed cache systems (e.g., Memcached with client-side consistent hashing).
+Mitigations: use a compound shard key that adds a secondary dimension (e.g., `user_id + time_bucket`), add an artificial random salt prefix to hot keys to spread writes across shards, or cache the hottest records in an in-process or Redis layer so database traffic never reaches the shard. The salt approach complicates reads — you must fan out and merge.
 
-> **Q: What makes cross-shard queries and rebalancing painful?**
+> **Q: What is consistent hashing and why does it help with rebalancing?**
 
-- **Cross-shard queries**: a `JOIN` or aggregation that spans shards requires scatter-gather — the application or query router sends the query to every shard, collects partial results, and merges them. This is slow and complex. Best practice: design the shard key so the most frequent queries stay within a single shard.
-- **Rebalancing**: moving data from an overloaded shard to a new one requires live data migration, careful routing updates, and a period where both old and new locations must be checked. Most systems minimize this via consistent hashing or virtual nodes (vnodes) that allow fine-grained movement.
+Standard `hash(key) % N` remaps nearly every key when N changes — adding a shard requires rehashing ~(N-1)/N of all keys. **Consistent hashing** arranges nodes and keys on a virtual ring. Adding or removing a node moves only the keys in the adjacent arc — roughly `K/N` keys instead of almost all. Cassandra and most distributed caches (Memcached with client-side consistent hashing) use this approach. Virtual nodes (vnodes) distribute each physical node's responsibility across many arc segments, giving finer-grained rebalancing.
+
+> **Q: What makes cross-shard operations painful, and how do you design around them?**
+
+- **Cross-shard joins/aggregations**: require scatter-gather — the query router fans out to every shard, waits for all partial results, then merges them in the application layer. Latency is bounded by the slowest shard; complexity is high.
+- **Cross-shard transactions**: two-phase commit (2PC) achieves atomicity but introduces a coordinator that blocks all participants if it crashes mid-protocol. Most teams avoid 2PC and instead model operations to be single-shard, or use saga patterns with compensating transactions for cross-shard workflows.
+- **Resharding**: moving data from an overloaded shard requires live migration — copy data, update routing, verify, cut over — while serving production traffic. Most systems minimize this via vnodes or pre-splitting into many more logical shards than physical nodes.
+
+The principal lesson: **shard key choice and cross-shard query avoidance are 90 % of the sharding problem**. Get the key wrong and no amount of consistent hashing or clever routing recovers it cheaply.
 
 ## Common follow-ups
 
-- How does multi-leader (active-active) replication differ from leader-follower, and what conflicts does it introduce?
-- What is a distributed transaction across shards, and how does two-phase commit address it?
-- How do distributed databases like CockroachDB or Spanner achieve global consistency without single-leader bottlenecks?
-- When would you choose sharding over vertical scaling (bigger machine) or read replicas?
+- Multi-leader (active-active) replication: what write conflicts does it introduce and how are they resolved? (last-write-wins, CRDTs, application-level resolution)
+- When does vertical scaling or more replicas outperform sharding? (most systems don't need sharding until hundreds of thousands of writes/sec or multi-TB datasets)
+- How do distributed databases like CockroachDB or Spanner achieve global consistency without a single-leader bottleneck? (Paxos/Raft per range, TrueTime)
+- What is a distributed transaction across shards, and when is 2PC acceptable vs. too costly?

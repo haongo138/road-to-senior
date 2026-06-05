@@ -10,9 +10,9 @@ status: draft
 
 > **Q: What is eventual consistency?**
 
-**Eventual consistency** guarantees that if no new writes are made to a data item, all replicas will **eventually converge to the same value**. There is no bound on how long convergence takes.
+**Eventual consistency** guarantees that if no new writes occur, all replicas will **converge to the same value** — but gives no bound on how long that takes. In the interim, reads may return stale data.
 
-It is weaker than **strong (linearizable) consistency**, where every read immediately reflects the latest write globally. In an eventually consistent system, a read may return stale data until propagation completes.
+It sits at the weak end of the consistency spectrum because it makes no claim about *when* you'll see a write. The common mistake is treating "eventually" as a synonym for "soon enough" — in practice, replication lag can stretch from milliseconds (healthy cluster, same region) to seconds or longer (cross-region, degraded network). Design for the worst case, not the median.
 
 > **Q: What are the intermediate consistency models between eventual and strong?**
 
@@ -21,45 +21,45 @@ From weakest to strongest:
 | Model | Guarantee |
 |-------|-----------|
 | **Eventual consistency** | Replicas converge; reads may be stale |
-| **Monotonic reads** | A client never reads older data than it previously read (no going backwards in time) |
+| **Monotonic reads** | A client never reads data older than a previous read (no time-travel) |
 | **Read-your-writes** | A client always sees its own writes immediately |
 | **Causal consistency** | Causally related operations are seen in causal order by all nodes |
-| **Sequential consistency** | All operations appear in a total order consistent with each process's order |
-| **Linearizability (strong)** | Operations appear instantaneous; real-time order respected |
+| **Sequential consistency** | All operations appear in a total order consistent with each process's program order |
+| **Linearizability (strong)** | Operations appear instantaneous; real-time ordering respected globally |
 
-**Session guarantees** (read-your-writes, monotonic reads, causal consistency) are commonly used to give each client a consistent *view* without requiring global synchronization.
+**Session guarantees** (read-your-writes, monotonic reads) are the practical middle ground: each client gets a consistent *view of its own activity* without requiring global synchronization. Common implementation: route a client's reads to the replica it last wrote to, or use a monotonically increasing read token.
 
 > **Q: How do systems resolve write conflicts in eventual consistency?**
 
-When two replicas accept concurrent writes to the same key, they must reconcile:
+When two replicas independently accept writes to the same key before syncing, they must reconcile:
 
-- **Last-write-wins (LWW)**: the write with the highest timestamp wins. Simple but can lose data if clocks are skewed.
-- **Vector clocks**: each write carries a version vector tracking causality per node. Concurrent (causally unrelated) writes are detected and surfaced to the application for resolution.
-- **CRDTs (Conflict-free Replicated Data Types)**: data structures (counters, sets, maps) designed so that any merge order produces the same result — no conflicts by construction. Used in Riak, Redis Enterprise, collaborative editors.
+- **Last-write-wins (LWW)**: the write with the highest timestamp wins. Simple and widely used (Cassandra default). Critical risk: **clock skew**. Two servers with clocks 50ms apart can silently discard the causally later write. NTP reduces but doesn't eliminate drift. LWW is acceptable when losing a concurrent write is tolerable; never use it for financial data.
+- **Vector clocks**: each write carries a version vector tracking causal history per node. Concurrent (causally unrelated) writes are detected and surfaced to the application to resolve. No silent data loss, but your application must implement merge logic and handle conflict objects.
+- **CRDTs (Conflict-free Replicated Data Types)**: data structures (grow-only counters, sets, OR-sets, maps) designed so any merge order yields the same result — no conflicts by construction. Used in Riak, Redis Enterprise, collaborative editors (OT vs CRDT is a related debate). The cost: not all data models fit a CRDT; CRDTs can grow in metadata size (tombstones in sets, vector clocks embedded per entry).
 
 > **Q: When is eventual consistency acceptable and when is it not?**
 
-| Acceptable | Not acceptable |
-|-----------|---------------|
+| Acceptable | Not acceptable without mitigation |
+|-----------|-------------------------------|
 | Social media feeds and likes | Bank account balances |
-| View / download counters | Inventory reservation ("last item") |
+| View / download counters | Inventory reservation ("last item" scenarios) |
 | DNS propagation | Payment processing |
-| Search index updates | Authentication tokens (revocation must be immediate) |
+| Search index updates | Authentication token revocation |
 | Product catalogue reads | Distributed locks |
 
-Rule of thumb: eventual consistency is fine when **stale data is not harmful** or when the business can tolerate a brief window of inaccuracy.
+The pattern for "not acceptable" cases isn't always "use strong consistency" — it's "use strong consistency for the critical path, or add a compensating mechanism." For inventory: reserve optimistically and reconcile with a saga or oversell buffer. For balances: use a ledger with strong consistency at the write side, eventual at the read side. Accepting eventual consistency without understanding the business impact of a staleness window is the senior-level mistake.
 
-> **Q: How does eventual consistency relate to CAP theorem?**
+> **Q: How does eventual consistency relate to the CAP theorem?**
 
-Eventual consistency is the natural **consistency model of AP systems** in CAP. When a distributed system chooses availability over consistency during a partition, it must accept that reads may return stale data. Eventual consistency defines the convergence guarantee once the partition heals.
+Eventual consistency is the natural **consistency model of AP systems**. When a system chooses availability over consistency during a network partition, reads from diverged replicas return potentially stale data. Eventual consistency defines what you get once the partition heals: replicas converge, but only after some delay. CAP tells you *why* you must accept eventual consistency in a highly available distributed system; eventual consistency describes *what that means operationally*.
 
 See also: [CAP Theorem](./cap-theorem).
 
 > **Q: How does sharding and replication interact with eventual consistency?**
 
-In a replicated system, writes go to a primary (leader) and are asynchronously propagated to replicas. Reads from replicas may be behind the leader — this is replication lag and is the source of eventual consistency in databases like MySQL replicas, DynamoDB global tables, or Cassandra with LOCAL_ONE reads.
+In a replicated system, writes go to a primary (leader) and are **asynchronously propagated** to replicas. Reads from replicas may lag behind the leader — this replication lag is the source of eventual consistency in MySQL read replicas, DynamoDB global tables, Cassandra with `LOCAL_ONE` reads, and similar setups.
 
-Stronger read guarantees (quorum reads) reduce the window of staleness at the cost of higher latency.
+The lag is not fixed: under write pressure it grows; during a follower restart it spikes. Monitor `seconds_behind_master` (MySQL), `ReplicationLatency` (DynamoDB), or equivalent. Quorum reads (e.g., Cassandra `QUORUM`) reduce the staleness window at the cost of higher read latency and reduced availability during failures — a direct PACELC trade-off.
 
 See also: [Sharding & Replication](./sharding-replication).
 
