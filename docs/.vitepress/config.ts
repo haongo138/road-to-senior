@@ -29,8 +29,10 @@ export default withMermaid({
         {
           text: 'System Design',
           items: [
-            { text: 'Overview', link: '/system-design/' },
+            { text: 'Overview (C4 model)', link: '/system-design/' },
             { text: 'Rate Limiter', link: '/system-design/rate-limiter' },
+            { text: 'URL Shortener', link: '/system-design/url-shortener' },
+            { text: 'News Feed', link: '/system-design/news-feed' },
           ],
         },
       ],
