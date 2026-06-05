@@ -127,6 +127,32 @@ export default withMermaid({
             { text: 'Eventual Consistency', link: '/technical/concepts/eventual-consistency' },
           ],
         },
+        {
+          text: 'Go (Golang) · Concurrency',
+          collapsed: true,
+          items: [
+            { text: 'Goroutines & the Scheduler', link: '/technical/concepts/go-goroutines-scheduler' },
+            { text: 'Channels & select', link: '/technical/concepts/go-channels-select' },
+            { text: 'context.Context', link: '/technical/concepts/go-context' },
+            { text: 'sync Primitives', link: '/technical/concepts/go-sync-primitives' },
+            { text: 'Channels vs Mutexes', link: '/technical/concepts/go-channels-vs-mutexes' },
+            { text: 'Data Races & Memory Model', link: '/technical/concepts/go-data-races' },
+            { text: 'Concurrency Patterns', link: '/technical/concepts/go-concurrency-patterns' },
+            { text: 'Goroutine Leaks', link: '/technical/concepts/go-goroutine-leaks' },
+          ],
+        },
+        {
+          text: 'Go (Golang) · Runtime & Semantics',
+          collapsed: true,
+          items: [
+            { text: 'GC & Escape Analysis', link: '/technical/concepts/go-gc-escape-analysis' },
+            { text: 'Interfaces & nil gotcha', link: '/technical/concepts/go-interfaces' },
+            { text: 'Slices & Maps Internals', link: '/technical/concepts/go-slices-maps' },
+            { text: 'defer, panic, recover', link: '/technical/concepts/go-defer-panic-recover' },
+            { text: 'Error Handling', link: '/technical/concepts/go-error-handling' },
+            { text: 'Generics', link: '/technical/concepts/go-generics' },
+          ],
+        },
       ],
       '/technical/': [
         {
