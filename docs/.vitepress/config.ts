@@ -17,6 +17,44 @@ export default withMermaid({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/haongo138/road-to-senior' },
     ],
+    sidebar: {
+      '/system-design/': [
+        {
+          text: 'System Design',
+          items: [
+            { text: 'Overview', link: '/system-design/' },
+            { text: 'Rate Limiter', link: '/system-design/rate-limiter' },
+          ],
+        },
+      ],
+      '/technical/': [
+        {
+          text: 'Technical Patterns',
+          items: [
+            { text: 'Overview', link: '/technical/' },
+            { text: 'Idempotency Keys', link: '/technical/idempotency' },
+          ],
+        },
+      ],
+      '/behavioral/': [
+        {
+          text: 'Behavioral',
+          items: [
+            { text: 'Overview', link: '/behavioral/' },
+            { text: 'STAR Method', link: '/behavioral/star-method' },
+          ],
+        },
+      ],
+      '/notes/': [
+        {
+          text: 'Notes',
+          items: [
+            { text: 'Overview', link: '/notes/' },
+            { text: 'How I use this site', link: '/notes/welcome' },
+          ],
+        },
+      ],
+    },
   },
   mermaid: {},
 })
