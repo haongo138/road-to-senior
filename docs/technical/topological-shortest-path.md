@@ -67,3 +67,18 @@ def dijkstra(graph, src):
 - Dijkstra requires non-negative weights; use Bellman-Ford for negative edges.
 - Dijkstra stale-entry check (`cost > dist[node]`) is essential to avoid reprocessing nodes.
 - Do not confuse topological sort (DAG ordering) with cycle detection (which is a side-effect of Kahn's).
+
+## Common follow-ups
+
+- How do you detect a cycle using Kahn's algorithm, and what does the output tell you?
+- When should you use Bellman-Ford instead of Dijkstra, and what is the cost?
+- How does topological sort enable O(V+E) shortest path computation on a DAG?
+- How do you reconstruct the actual shortest path from Dijkstra's `dist` table?
+
+## Practice (LeetCode)
+
+- LC 207 — Course Schedule
+- LC 210 — Course Schedule II
+- LC 269 — Alien Dictionary
+- LC 743 — Network Delay Time
+- LC 787 — Cheapest Flights Within K Stops

@@ -35,3 +35,18 @@ def backtrack(state, choices):
 - Forgetting to copy `state` when recording a solution (you'll push the same mutable list repeatedly).
 - Missing the pruning condition — without it the algorithm degrades to brute force.
 - For permutations, track a `used` boolean array to avoid reusing the same index.
+
+## Common follow-ups
+
+- How would you modify the template to generate combinations instead of permutations?
+- Where exactly is the pruning condition applied, and how does it affect the branching factor?
+- How do you avoid duplicate results when the input contains repeated elements?
+- Can you convert this recursive backtracking into an iterative solution?
+
+## Practice (LeetCode)
+
+- LC 46 — Permutations
+- LC 78 — Subsets
+- LC 39 — Combination Sum
+- LC 22 — Generate Parentheses
+- LC 51 — N-Queens

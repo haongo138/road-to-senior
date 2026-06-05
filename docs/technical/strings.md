@@ -58,3 +58,18 @@ def find_anagrams(s, p):
 - Comparing `Counter` objects is safe in Python but linear in the number of distinct keys — for large alphabets, use a running match count instead.
 - Remember strings are immutable in Python/Java — building a result with `+=` in a loop is O(n²); use `join` or a list buffer.
 - Sliding window on strings: shrink the window only when the invariant is violated, not on every step.
+
+## Common follow-ups
+
+- How would you find all anagram occurrences of a pattern in a string in O(n)?
+- What is the time complexity of the naive palindrome check, and how does Manacher's algorithm improve it?
+- How do you handle Unicode or multi-byte characters when using character frequency maps?
+- When is a Rabin-Karp rolling hash useful compared to a sliding window frequency map?
+
+## Practice (LeetCode)
+
+- LC 3 — Longest Substring Without Repeating Characters
+- LC 5 — Longest Palindromic Substring
+- LC 76 — Minimum Window Substring
+- LC 242 — Valid Anagram
+- LC 14 — Longest Common Prefix

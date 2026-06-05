@@ -51,3 +51,19 @@ def next_greater(nums):
 - Python's `heapq` is a *min*-heap. For max-heap, negate values: push `-x`, pop and negate.
 - Monotonic stack direction matters: decreasing stack → next *greater* element; increasing stack → next *smaller*.
 - Heap does not sort the full array — only guarantees the top is the min/max.
+
+## Common follow-ups
+
+- How do you maintain a running median using two heaps?
+- When is a monotonic stack increasing vs decreasing, and how does the direction determine what you're computing?
+- What is the time complexity of building a heap from an unsorted array, and why?
+- How would you implement a max-heap in Python given that `heapq` is a min-heap?
+
+## Practice (LeetCode)
+
+- LC 215 — Kth Largest Element in an Array
+- LC 347 — Top K Frequent Elements
+- LC 23 — Merge k Sorted Lists
+- LC 20 — Valid Parentheses
+- LC 739 — Daily Temperatures
+- LC 84 — Largest Rectangle in Histogram

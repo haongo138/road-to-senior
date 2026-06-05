@@ -39,3 +39,18 @@ Merge sort is the canonical example — `merge` takes O(n) and recurrence is T(n
 - Forgetting to handle the base case for a single element vs empty range.
 - Off-by-one in `mid` calculation — use `lo + (hi - lo) // 2` to avoid integer overflow in languages without big integers.
 - Merge step must handle both halves being fully consumed before the loop exits.
+
+## Common follow-ups
+
+- What does the Master Theorem tell you about the recurrence T(n) = 2T(n/2) + O(n)?
+- How does quick sort differ from merge sort in terms of when the work happens (split vs merge)?
+- When would you prefer divide-and-conquer over DP, and what distinguishes the two?
+- How do you implement in-place merge sort to avoid the O(n) auxiliary space?
+
+## Practice (LeetCode)
+
+- LC 912 — Sort an Array
+- LC 53 — Maximum Subarray
+- LC 215 — Kth Largest Element in an Array
+- LC 169 — Majority Element
+- LC 23 — Merge k Sorted Lists

@@ -59,3 +59,18 @@ class Trie:
 - Using an array of 26 children instead of a dict wastes memory for non-lowercase-only inputs.
 - `search` and `starts_with` differ only in the final `is_end` check — easy to confuse.
 - Deleting from a trie requires backtracking to prune empty branches; it is non-trivial.
+
+## Common follow-ups
+
+- How would you modify the trie to support wildcard search (e.g. `.` matches any character)?
+- What is the space complexity compared to storing words in a hashset, and when is a trie worth it?
+- How do you combine a trie with backtracking to solve Word Search II efficiently?
+- How would you count all words in the trie that share a given prefix?
+
+## Practice (LeetCode)
+
+- LC 208 — Implement Trie (Prefix Tree)
+- LC 211 — Design Add and Search Words Data Structure
+- LC 212 — Word Search II
+- LC 14 — Longest Common Prefix
+- LC 648 — Replace Words

@@ -51,3 +51,23 @@ def min_feasible(lo, hi, feasible):
 - Off-by-one in loop invariant: `lo <= hi` for exact match; `lo < hi` for lower-bound style.
 - The predicate must be *strictly monotone* — if it can flip back and forth, binary search gives wrong answers.
 - Forgetting to update both `lo` and `hi` inside every branch leads to infinite loops.
+
+## Leftmost vs rightmost
+
+When searching for the boundary of a monotonic predicate (e.g. first/last position of a value), you are not searching for a value but for the point where the predicate flips from false to true. Bias the midpoint down (`lo + (hi - lo) // 2`) and update `lo` or `hi` — never exclude `mid` from the next range — to converge on the first-true (leftmost) or last-true (rightmost) boundary. Use `lo < hi` as the loop condition (not `lo <= hi`) so the loop exits with `lo == hi` at the answer.
+
+## Common follow-ups
+
+- How do you adapt binary search to find the leftmost vs rightmost occurrence of a target?
+- How do you binary-search on the answer when there is no explicit sorted array?
+- What makes a space suitable for binary search — what property must the predicate satisfy?
+- How does binary search work on a rotated sorted array, and which half can you safely discard?
+
+## Practice (LeetCode)
+
+- LC 704 — Binary Search
+- LC 33 — Search in Rotated Sorted Array
+- LC 34 — Find First and Last Position of Element in Sorted Array
+- LC 153 — Find Minimum in Rotated Sorted Array
+- LC 875 — Koko Eating Bananas
+- LC 4 — Median of Two Sorted Arrays

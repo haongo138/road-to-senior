@@ -30,6 +30,15 @@ export default withMermaid({
       ],
       '/technical/': [
         {
+          text: 'Interview Method',
+          items: [
+            { text: 'Interview Process (UMPIRE)', link: '/technical/interview-process' },
+            { text: 'Communication & Whiteboard', link: '/technical/communication' },
+            { text: 'Big-O Primer', link: '/technical/big-o' },
+            { text: 'Study Plan', link: '/technical/study-plan' },
+          ],
+        },
+        {
           text: 'Technical Patterns',
           items: [
             { text: 'Overview', link: '/technical/' },
@@ -45,12 +54,15 @@ export default withMermaid({
             { text: 'Dynamic Programming', link: '/technical/dynamic-programming' },
             { text: 'Divide and Conquer', link: '/technical/divide-and-conquer' },
             { text: 'Graphs', link: '/technical/graph' },
+            { text: 'Linked List', link: '/technical/linked-list' },
             { text: 'Hashmap', link: '/technical/hashmap' },
             { text: 'Prefix Sum', link: '/technical/prefix-sum' },
             { text: 'Strings', link: '/technical/strings' },
             { text: 'Sliding Window', link: '/technical/sliding-window' },
             { text: 'Two Pointers', link: '/technical/two-pointers' },
+            { text: 'Intervals', link: '/technical/intervals' },
             { text: 'Heap & Stack', link: '/technical/heap-stack' },
+            { text: 'Greedy', link: '/technical/greedy' },
             { text: 'Binary Search', link: '/technical/binary-search' },
           ],
         },
@@ -60,6 +72,7 @@ export default withMermaid({
             { text: 'Difference Array', link: '/technical/difference-array' },
             { text: 'Trie', link: '/technical/trie' },
             { text: 'Union-Find (DSU)', link: '/technical/union-find' },
+            { text: 'Bit Manipulation', link: '/technical/bit-manipulation' },
             { text: 'Topological & Shortest Paths', link: '/technical/topological-shortest-path' },
           ],
         },

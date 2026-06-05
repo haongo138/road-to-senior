@@ -49,3 +49,18 @@ class UnionFind:
 - Forgetting path compression means `find` degrades to O(n) for skewed trees.
 - `union` should return `False` (not crash) when the two nodes are already in the same set — this is how you detect cycles.
 - DSU only handles *undirected* connectivity; for directed reachability, use DFS/BFS instead.
+
+## Common follow-ups
+
+- Why does path compression alone not give you the best amortised bound — what does union by rank add?
+- How does Union-Find detect a cycle during edge insertion?
+- How would you use DSU to implement Kruskal's MST algorithm?
+- Can you use DSU for a directed graph? Why or why not?
+
+## Practice (LeetCode)
+
+- LC 547 — Number of Provinces
+- LC 200 — Number of Islands
+- LC 684 — Redundant Connection
+- LC 721 — Accounts Merge
+- LC 1319 — Number of Operations to Make Network Connected

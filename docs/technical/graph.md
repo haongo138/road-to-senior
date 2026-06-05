@@ -50,3 +50,25 @@ def bfs(start):
 - Omitting the `visited` set causes infinite recursion in cyclic graphs.
 - For directed graphs, "visited" during DFS does not mean "fully processed" — use a three-colour scheme (white/grey/black) to detect back edges for cycle detection.
 - Grid problems are graphs in disguise; treat each cell as a node and cardinal neighbours as edges.
+
+## BFS vs DFS
+
+| Algorithm | Best for |
+|---|---|
+| BFS | Shortest path in an unweighted graph; processing nodes by level or distance |
+| DFS | Connectivity, cycle detection, topological ordering, path enumeration / backtracking |
+
+## Common follow-ups
+
+- When does BFS give you the shortest path, and why doesn't DFS guarantee it?
+- How do you detect a cycle in a directed graph vs an undirected graph?
+- How would you extend this to a weighted graph (Dijkstra vs Bellman-Ford)?
+- How do you handle disconnected graphs to ensure all components are visited?
+
+## Practice (LeetCode)
+
+- LC 200 — Number of Islands
+- LC 133 — Clone Graph
+- LC 207 — Course Schedule
+- LC 994 — Rotting Oranges
+- LC 417 — Pacific Atlantic Water Flow

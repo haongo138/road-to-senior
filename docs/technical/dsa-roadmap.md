@@ -45,6 +45,19 @@ flowchart TD
 
 ---
 
+## Start here — the interview method
+
+Patterns get you to a solution; method gets you through the room.
+
+- [Interview Process (UMPIRE)](./interview-process) — a 6-step loop so you never freeze
+- [Communication & Whiteboard](./communication) — how to think out loud and present code
+- [Big-O Primer](./big-o) — reason about trade-offs
+- [Study Plan](./study-plan) — 1 / 2 / 6-week roadmaps + a curated problem set
+
+> Philosophy: **learn patterns, not problems.** Internalize a pattern and new problems become variations. Always plan your own approach before reading any solution.
+
+---
+
 ## Group 1 — The Recursion Family (built on Tree)
 
 > "We can learn about recursion: Base case; Recurrence Relation; How children respond to their parents; DFS, BFS."
@@ -56,6 +69,7 @@ Tree is the gateway. Once you understand how a tree node delegates work to its c
 3. [Dynamic Programming](./dynamic-programming) — memoize overlapping sub-problems
 4. [Divide and Conquer](./divide-and-conquer) — split, solve, merge
 5. [Graphs](./graph) — generalized trees with cycles
+6. [Linked List](./linked-list) — foundational node-chain structure; pointer manipulation practice for tree/graph work
 
 ---
 
@@ -75,12 +89,14 @@ Hashmap rarely stands alone — it amplifies every other technique.
 
 8. [Sliding Window](./sliding-window) — variable-length window that grows/shrinks to satisfy a condition
 9. [Two Pointers](./two-pointers) — "main algorithm to check the sub-array with given conditions; slow-fast pointers; opposite-ends pointers"
+10. [Intervals](./intervals) — merge/insert/sweep; an array-scan technique that pairs naturally with two-pointer thinking
 
 ---
 
 ## Group 4 — Heap & Stack
 
-10. [Heap & Stack](./heap-stack) — combined with hashmap, extremely useful in system design; "top is the most important thing"
+11. [Heap & Stack](./heap-stack) — combined with hashmap, extremely useful in system design; "top is the most important thing"
+- [Greedy](./greedy) — the counterpart to DP: when the exchange argument holds, take the locally optimal choice; no memoization needed
 
 ---
 
@@ -95,4 +111,11 @@ Hashmap rarely stands alone — it amplifies every other technique.
 - [Difference Array](./difference-array) — range updates in O(1)
 - [Trie](./trie) — prefix tree; I like this one a lot
 - [Union-Find (DSU)](./union-find) — connectivity queries
+- [Bit Manipulation](./bit-manipulation) — XOR tricks, masks, power-of-2 checks; surprisingly common in hard problems
 - [Topological Sort & Shortest Paths](./topological-shortest-path) — Kahn's + Dijkstra
+
+---
+
+## Further reading
+
+- [EngineerPro — Coding DSA Interview at Big Tech](https://engineerpro-team.github.io/coding-book/) — 288 worked problems organized by pattern; the source this roadmap's interview-method notes draw on.

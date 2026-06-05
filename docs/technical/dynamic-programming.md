@@ -48,3 +48,19 @@ for i in range(1, m+1):
 - Wrong state definition — if two distinct situations map to the same state key, results are incorrect.
 - Off-by-one in base cases (0-indexed vs 1-indexed dp table).
 - Not recognising the sub-problem: if you can't articulate the recurrence, step back to the recursive tree.
+
+## Common follow-ups
+
+- Can you reduce the space complexity with a rolling array?
+- How do you reconstruct the actual solution (not just the optimal value)?
+- What is the state definition, and why is it sufficient to capture all distinct sub-problems?
+- How would you approach this top-down vs bottom-up, and what are the trade-offs?
+
+## Practice (LeetCode)
+
+- LC 70 — Climbing Stairs
+- LC 198 — House Robber
+- LC 322 — Coin Change
+- LC 300 — Longest Increasing Subsequence
+- LC 1143 — Longest Common Subsequence
+- LC 72 — Edit Distance

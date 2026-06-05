@@ -50,3 +50,18 @@ def dp(state):
 - Hash collisions can degrade performance — prefer built-in dict/HashMap which handles this.
 - Mutable objects (lists, dicts) cannot be keys in Python; convert to tuple first.
 - Don't forget to handle the case where a key is absent (`get(key, default)` or `defaultdict`).
+
+## Common follow-ups
+
+- What is the worst-case time complexity of hashmap operations, and when can it occur?
+- How would you design a hashmap from scratch (hash function, collision resolution)?
+- Can you solve Two Sum in O(n) time and O(1) space? Why or why not?
+- How does using a sorted frequency map change the complexity for anagram grouping?
+
+## Practice (LeetCode)
+
+- LC 1 — Two Sum
+- LC 49 — Group Anagrams
+- LC 242 — Valid Anagram
+- LC 387 — First Unique Character in a String
+- LC 560 — Subarray Sum Equals K

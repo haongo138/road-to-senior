@@ -56,3 +56,27 @@ def bfs(root):
 - Forgetting the null / empty base case causes NullPointerException.
 - Mixing up what the recursive call *returns* vs what it *does* (return value vs side effect).
 - Using BFS when DFS is sufficient wastes memory; prefer DFS unless level-order is required.
+
+## Traversal cheat sheet
+
+| Order | Sequence | Typical use |
+|---|---|---|
+| Pre-order | root → L → R | Serialize / clone a tree |
+| In-order | L → root → R | BST sorted output, kth smallest |
+| Post-order | L → R → root | Aggregate from children (tree DP, diameter) |
+| Level-order | BFS layer by layer | By layer / by distance |
+
+## Common follow-ups
+
+- How would you solve this iteratively instead of recursively?
+- What changes if the tree is a BST — can you exploit the ordering property?
+- How do you find the diameter (longest path between any two nodes)?
+- How would you serialize and deserialize a binary tree?
+
+## Practice (LeetCode)
+
+- LC 104 — Maximum Depth of Binary Tree
+- LC 102 — Binary Tree Level Order Traversal
+- LC 226 — Invert Binary Tree
+- LC 236 — Lowest Common Ancestor of a Binary Tree
+- LC 124 — Binary Tree Maximum Path Sum

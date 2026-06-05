@@ -45,3 +45,18 @@ Fixed-size window variant — just move `left = right - k + 1` unconditionally.
 - Using a nested loop instead of the shrink step defeats the purpose (back to O(n²)).
 - For "at most k" problems, the answer is every valid `[left, right]` window, not just the moment `right` stops.
 - Fixed vs variable window: know which you need before coding. Fixed windows are simpler — avoid adding shrink logic that isn't needed.
+
+## Common follow-ups
+
+- How does the sliding window for "at most k distinct characters" differ from "exactly k distinct"?
+- What window state do you maintain for minimum window substring, and how do you know the window is valid?
+- When would a deque (monotonic queue) replace a simple counter inside the window?
+- How do you adapt the template when the array contains negative numbers?
+
+## Practice (LeetCode)
+
+- LC 3 — Longest Substring Without Repeating Characters
+- LC 76 — Minimum Window Substring
+- LC 424 — Longest Repeating Character Replacement
+- LC 209 — Minimum Size Subarray Sum
+- LC 567 — Permutation in String

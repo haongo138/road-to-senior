@@ -41,3 +41,17 @@ def apply_range_updates(n, updates):
 - Allocate `diff` with size `n + 1` (one extra) to safely write `diff[r+1]` when `r == n-1`.
 - 0-indexed vs 1-indexed: be consistent between the problem's indexing and the diff array.
 - Difference array only works for additive (group) operations — it does not generalise to multiply or bitwise updates.
+
+## Common follow-ups
+
+- What is the relationship between a difference array and a prefix sum — how are they inverses of each other?
+- How do you find the maximum number of overlapping intervals using a difference array?
+- How would you handle range updates that wrap around (circular array)?
+- When would you prefer a segment tree or BIT over a difference array?
+
+## Practice (LeetCode)
+
+- LC 1109 — Corporate Flight Bookings
+- LC 1094 — Car Pooling
+- LC 370 — Range Addition
+- LC 2381 — Shifting Letters II

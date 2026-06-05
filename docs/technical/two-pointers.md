@@ -50,3 +50,18 @@ def has_cycle(head):
 - Opposite-ends only works on *sorted* input (or when a monotone property lets you discard one side safely).
 - Slow-fast cycle detection: start both at `head`, not `head.next`, to handle single-element lists.
 - Don't use two pointers on unsorted data hoping to find a pair — sort first or use a hashmap.
+
+## Common follow-ups
+
+- How do you extend Two Sum to 3Sum or 4Sum while avoiding duplicates?
+- How does slow-fast pointer detect where a cycle starts, not just whether one exists?
+- Why does the opposite-ends approach require the array to be sorted, and what is the invariant being maintained?
+- How would you solve "trapping rain water" and what makes two pointers work there?
+
+## Practice (LeetCode)
+
+- LC 167 — Two Sum II - Input Array Is Sorted
+- LC 15 — 3Sum
+- LC 11 — Container With Most Water
+- LC 125 — Valid Palindrome
+- LC 42 — Trapping Rain Water
