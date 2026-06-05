@@ -154,7 +154,7 @@ const pages: RawPage[] = [
 describe('buildCards', () => {
   it('keeps only pages with a title and a known category', () => {
     const cards = buildCards(pages)
-    expect(cards.map((c) => c.url)).toEqual(['/system-design/rate-limiter', '/technical/idempotency'])
+    expect(cards.map((c) => c.url)).toEqual(['/technical/idempotency', '/system-design/rate-limiter'])
   })
 
   it('sorts by title and applies frontmatter defaults', () => {
