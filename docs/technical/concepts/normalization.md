@@ -8,8 +8,7 @@ status: draft
 
 # Normalization
 
-> **Q: What problem does normalization solve?**
-
+::: details Q: What problem does normalization solve?
 Redundant data creates **update anomalies** — situations where a single logical change requires updates in multiple places, and a partial update leaves the database inconsistent:
 
 - **Insertion anomaly** — you can't record a fact without inserting unrelated data.
@@ -17,9 +16,9 @@ Redundant data creates **update anomalies** — situations where a single logica
 - **Deletion anomaly** — deleting a row inadvertently destroys other facts stored alongside it.
 
 Normalization restructures tables so each fact is stored exactly once. The cost is read-time joins — you pay at query time to avoid write-time inconsistency. Whether that trade is right depends on your workload.
+:::
 
-> **Q: What are 1NF, 2NF, and 3NF?**
-
+::: details Q: What are 1NF, 2NF, and 3NF?
 | Normal Form | Rule |
 |---|---|
 | **1NF** | Every column holds a single atomic value; no repeating groups or arrays. Rows are uniquely identifiable (primary key exists). |
@@ -40,17 +39,17 @@ CREATE TABLE orders (
 CREATE TABLE zip_codes (zip_code CHAR(5) PRIMARY KEY, city VARCHAR(100));
 CREATE TABLE orders    (order_id INT PRIMARY KEY, zip_code CHAR(5) REFERENCES zip_codes);
 ```
+:::
 
-> **Q: What is denormalization, and who bears the consistency burden?**
-
+::: details Q: What is denormalization, and who bears the consistency burden?
 Denormalization deliberately reintroduces redundancy — duplicating columns or pre-joining tables — to eliminate join cost at read time. The read becomes cheaper; the write becomes more complex.
 
 The critical insight interviewers test: **the database no longer enforces consistency of the redundant copies — your application code does.** A bug that updates one copy but not another produces silent data drift that's hard to detect and painful to repair. Denormalization is a deliberate choice to accept that operational burden in exchange for read performance.
 
 Approach: normalize first to 3NF, profile under realistic load, then denormalize specific hot paths where join cost is measured and material — not hypothetical.
+:::
 
-> **Q: When should you favor normalization vs. denormalization?**
-
+::: details Q: When should you favor normalization vs. denormalization?
 | Workload | Preferred approach | Reason |
 |---|---|---|
 | **OLTP** (banking, e-commerce, SaaS) | Normalized (3NF) | Frequent writes; consistency and integrity are critical; joins are cheap on small result sets. |
@@ -58,10 +57,11 @@ Approach: normalize first to 3NF, profile under realistic load, then denormalize
 | **Read-heavy microservice** | Selective denormalization | Pre-compute joined data in materialized views or read models (CQRS); sync via events, not foreign keys. |
 
 Star schemas in data warehouses are 3NF violations by design: dimension tables are intentionally wide and repeated because analytical query engines (columnar stores, vectorized execution) can scan them far faster than they can chase foreign keys across normalized tables. Choosing 3NF for an analytics warehouse is wrong — it makes aggregation slower without meaningful consistency benefit since the data is loaded by batch ETL anyway.
+:::
 
-> **Q: Is BCNF different from 3NF and does it matter in practice?**
-
+::: details Q: Is BCNF different from 3NF and does it matter in practice?
 BCNF tightens 3NF: for every functional dependency `X → Y`, `X` must be a superkey. It catches a narrow class of anomalies when overlapping candidate keys exist. In practice, tables that satisfy 3NF are almost always in BCNF. Most production schema work stops at 3NF; BCNF is relevant for academic rigor and corner-case schema design.
+:::
 
 ## Common follow-ups
 
