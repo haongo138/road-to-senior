@@ -40,6 +40,13 @@ Interviewers test whether you understand *why* systems are designed the way they
 - [CAP Theorem](./cap-theorem)
 - [Eventual Consistency](./eventual-consistency)
 
+## Auth & Tokens
+
+- [JSON Web Tokens (JWT)](./jwt)
+- [OAuth 2.0](./oauth2)
+- [OpenID Connect (OIDC)](./openid-connect)
+- [Access & Refresh Tokens](./access-refresh-tokens)
+
 ## Go (Golang) · Concurrency
 
 - [Goroutines & the Scheduler](./go-goroutines-scheduler)

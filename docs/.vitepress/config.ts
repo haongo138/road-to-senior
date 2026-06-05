@@ -133,6 +133,16 @@ export default withMermaid({
           ],
         },
         {
+          text: 'Auth & Tokens',
+          collapsed: true,
+          items: [
+            { text: 'JSON Web Tokens (JWT)', link: '/technical/concepts/jwt' },
+            { text: 'OAuth 2.0', link: '/technical/concepts/oauth2' },
+            { text: 'OpenID Connect (OIDC)', link: '/technical/concepts/openid-connect' },
+            { text: 'Access & Refresh Tokens', link: '/technical/concepts/access-refresh-tokens' },
+          ],
+        },
+        {
           text: 'Go (Golang) · Concurrency',
           collapsed: true,
           items: [
