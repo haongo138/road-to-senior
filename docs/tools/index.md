@@ -20,3 +20,6 @@ My toolbox — libraries and tools I use daily, am learning, or have on the rada
 ## Comparisons
 
 - [Go vs Java vs Rust (interview)](./go-vs-java-vs-rust)
+- [REST vs gRPC vs GraphQL](./rest-vs-grpc-vs-graphql)
+- [PostgreSQL vs MySQL](./postgres-vs-mysql)
+- [Kafka vs RabbitMQ](./kafka-vs-rabbitmq)

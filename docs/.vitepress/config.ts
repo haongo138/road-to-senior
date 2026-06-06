@@ -257,6 +257,9 @@ export default withMermaid({
           text: 'Comparisons',
           items: [
             { text: 'Go vs Java vs Rust', link: '/tools/go-vs-java-vs-rust' },
+            { text: 'REST vs gRPC vs GraphQL', link: '/tools/rest-vs-grpc-vs-graphql' },
+            { text: 'PostgreSQL vs MySQL', link: '/tools/postgres-vs-mysql' },
+            { text: 'Kafka vs RabbitMQ', link: '/tools/kafka-vs-rabbitmq' },
           ],
         },
       ],
