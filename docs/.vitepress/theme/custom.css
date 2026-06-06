@@ -22,6 +22,12 @@
   --rs-ease: 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Always reserve the scrollbar gutter so expanding a collapsed question
+   (which grows the page past the viewport) never shifts the layout sideways. */
+html {
+  scrollbar-gutter: stable;
+}
+
 .dark {
   --vp-c-brand-1: #e0926e; /* lighter warm for contrast on dark */
   --vp-c-brand-2: #e9a986;
