@@ -8,6 +8,10 @@ My toolbox — libraries and tools I use daily, am learning, or have on the rada
 
 **Status:** `daily` (active use) · `learning` (ramping up) · `future` (on the radar).
 
+## My Stack & Flows
+
+- [DevOps Stack & Flow](./devops-flow) — GitHub Actions → ECR → ArgoCD → EKS (GitOps)
+
 ## Toolbox
 
 - [Languages](./languages)

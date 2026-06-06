@@ -244,6 +244,12 @@ export default withMermaid({
           ],
         },
         {
+          text: 'My Stack & Flows',
+          items: [
+            { text: 'DevOps Stack & Flow', link: '/tools/devops-flow' },
+          ],
+        },
+        {
           text: 'Toolbox',
           items: [
             { text: 'Languages', link: '/tools/languages' },
