@@ -57,6 +57,12 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
+/* ---- Zoomable media (click to open in the lightbox) ---- */
+.vp-doc img,
+.mermaid {
+  cursor: zoom-in;
+}
+
 /* ---- Filter chips ---- */
 .rs-filter {
   display: flex;
