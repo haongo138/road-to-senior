@@ -19,6 +19,7 @@ export default withMermaid({
       },
       { text: 'Behavioral', link: '/behavioral/' },
       { text: 'Notes', link: '/notes/' },
+      { text: 'Tools', link: '/tools/' },
       { text: 'Tags', link: '/tags' },
     ],
     socialLinks: [
@@ -231,6 +232,25 @@ export default withMermaid({
           items: [
             { text: 'Overview', link: '/notes/' },
             { text: 'How I use this site', link: '/notes/welcome' },
+          ],
+        },
+      ],
+      '/tools/': [
+        {
+          text: 'Tools',
+          items: [
+            { text: 'Overview', link: '/tools/' },
+          ],
+        },
+        {
+          text: 'Toolbox',
+          items: [
+            { text: 'Languages', link: '/tools/languages' },
+            { text: 'Backend & Web', link: '/tools/backend-web' },
+            { text: 'Data & Storage', link: '/tools/data-storage' },
+            { text: 'Infra & DevOps', link: '/tools/infra-devops' },
+            { text: 'Observability', link: '/tools/observability' },
+            { text: 'Testing', link: '/tools/testing' },
           ],
         },
       ],
