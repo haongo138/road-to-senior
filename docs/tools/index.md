@@ -16,3 +16,7 @@ My toolbox — libraries and tools I use daily, am learning, or have on the rada
 - [Infra & DevOps](./infra-devops)
 - [Observability](./observability)
 - [Testing](./testing)
+
+## Comparisons
+
+- [Go vs Java vs Rust (interview)](./go-vs-java-vs-rust)

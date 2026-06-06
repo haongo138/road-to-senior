@@ -11,8 +11,8 @@ const categories = [
   { key: 'problem-solving', label: 'Problem Solving' },
   { key: 'tech-concepts', label: 'Tech Concepts' },
   { key: 'behavioral', label: 'Behavioral' },
-  { key: 'notes', label: 'Notes' },
   { key: 'tools', label: 'Tools' },
+  { key: 'notes', label: 'Notes' },
 ]
 const active = ref('all')
 const visible = computed(() => filterByCategory(cards, active.value))

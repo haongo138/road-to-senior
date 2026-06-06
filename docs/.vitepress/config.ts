@@ -18,8 +18,8 @@ export default withMermaid({
         ],
       },
       { text: 'Behavioral', link: '/behavioral/' },
-      { text: 'Notes', link: '/notes/' },
       { text: 'Tools', link: '/tools/' },
+      { text: 'Notes', link: '/notes/' },
       { text: 'Tags', link: '/tags' },
     ],
     socialLinks: [
@@ -251,6 +251,12 @@ export default withMermaid({
             { text: 'Infra & DevOps', link: '/tools/infra-devops' },
             { text: 'Observability', link: '/tools/observability' },
             { text: 'Testing', link: '/tools/testing' },
+          ],
+        },
+        {
+          text: 'Comparisons',
+          items: [
+            { text: 'Go vs Java vs Rust', link: '/tools/go-vs-java-vs-rust' },
           ],
         },
       ],

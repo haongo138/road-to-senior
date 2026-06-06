@@ -19,5 +19,6 @@ Where data lives, flows, and gets cached in the systems I build.
 | S3 / object storage | `daily` | Large blobs, backups, and static assets |
 | Elasticsearch / OpenSearch | `learning` | Full-text search and log aggregation at scale |
 | ClickHouse | `future` | Columnar analytics when Postgres OLAP queries get slow |
+| [Scrapling](https://github.com/D4Vinci/Scrapling) | `learning` | Crawler — adaptive, stealthy Python web scraping, single request to full crawl |
 
 *Edit to match your stack.*
