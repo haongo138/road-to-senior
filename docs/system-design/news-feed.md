@@ -21,7 +21,7 @@ status: review
 > Who/what interacts with the system; the entire News Feed system is one box.
 
 ```mermaid
-flowchart LR
+flowchart TB
   user([Mobile or Web User])
   cdn([CDN])
   notif([Notification Service])
@@ -40,7 +40,7 @@ The News Feed System handles both the write path (post creation, fan-out) and th
 > Deployable units and how they communicate.
 
 ```mermaid
-flowchart LR
+flowchart TB
   user([User])
   cdn([CDN])
 

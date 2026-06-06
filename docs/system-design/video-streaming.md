@@ -21,7 +21,7 @@ status: review
 > Who/what interacts with the system; the entire Video Streaming system is one box.
 
 ```mermaid
-flowchart LR
+flowchart TB
   creator([Creator])
   viewer([Viewer])
   cdn([CDN Edge])
@@ -39,7 +39,7 @@ The Video Streaming System handles the write path (upload, transcode, package, p
 > Deployable units and how they communicate.
 
 ```mermaid
-flowchart LR
+flowchart TB
   creator([Creator])
   viewer([Viewer])
 
@@ -84,7 +84,7 @@ flowchart LR
 > Internal components of the most interesting container.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph "Video Streaming System"
     subgraph "Transcode Worker"
       ingest[Ingest and Validator]

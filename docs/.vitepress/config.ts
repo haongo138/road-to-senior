@@ -272,5 +272,9 @@ export default withMermaid({
       ],
     },
   },
-  mermaid: {},
+  mermaid: {
+    // Wrap labels only on explicit "\n" breaks, not auto-wrap. Auto-wrapping
+    // adds lines the node-height calc doesn't account for, clipping the overflow.
+    flowchart: { wrappingWidth: 400 },
+  },
 })

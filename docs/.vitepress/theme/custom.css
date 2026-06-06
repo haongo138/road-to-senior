@@ -63,6 +63,13 @@ html {
   cursor: zoom-in;
 }
 
+/* Mermaid renders node labels in a <foreignObject> whose default overflow
+   clips the bottom line's descenders (y, g, p → look like v, etc.). Let them
+   show. */
+.mermaid foreignObject {
+  overflow: visible;
+}
+
 /* ---- Filter chips ---- */
 .rs-filter {
   display: flex;

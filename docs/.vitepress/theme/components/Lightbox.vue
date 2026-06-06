@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 // A single global lightbox. Click any diagram or image in the docs to zoom it
 // to fill the screen; close via the ✕ button, Esc, or clicking the backdrop.
@@ -11,16 +11,41 @@ const mode = ref<Mode>('img')
 const imgSrc = ref('')
 const imgAlt = ref('')
 const svgHtml = ref('')
+// Box that wraps the scaled SVG; sized to the diagram's scaled dimensions.
+const svgBox = reactive({ width: '0px', height: '0px' })
+
+// Lock scroll on <body> (not <html>): the Mermaid plugin runs a MutationObserver
+// on <html> attributes and re-renders — blanking diagrams — if we touch its style.
+let savedScrollY = 0
+
+function lockScroll() {
+  savedScrollY = window.scrollY
+  const body = document.body
+  body.style.position = 'fixed'
+  body.style.top = `-${savedScrollY}px`
+  body.style.left = '0'
+  body.style.right = '0'
+  body.style.width = '100%'
+}
+
+function unlockScroll() {
+  const body = document.body
+  body.style.position = ''
+  body.style.top = ''
+  body.style.left = ''
+  body.style.right = ''
+  body.style.width = ''
+  window.scrollTo(0, savedScrollY)
+}
 
 function show() {
   open.value = true
-  // Lock background scroll while zoomed.
-  document.documentElement.style.overflow = 'hidden'
+  lockScroll()
 }
 
 function close() {
   open.value = false
-  document.documentElement.style.overflow = ''
+  unlockScroll()
 }
 
 function openImg(el: HTMLImageElement) {
@@ -31,8 +56,33 @@ function openImg(el: HTMLImageElement) {
 }
 
 function openSvg(svg: SVGElement) {
+  // Scale the diagram to fill the screen with a CSS transform — this enlarges the
+  // rendered content regardless of how Mermaid sized its <svg> (viewBox, inline
+  // max-width, width="100%", etc.). We size a wrapper box to the scaled dimensions
+  // so the overlay can center it.
+  const rect = svg.getBoundingClientRect()
+  const natW = rect.width || 800
+  const natH = rect.height || 450
+  const scale = Math.min(
+    (window.innerWidth * 0.92) / natW,
+    (window.innerHeight * 0.88) / natH,
+  )
+
+  const clone = svg.cloneNode(true) as SVGElement
+  clone.removeAttribute('width')
+  clone.removeAttribute('height')
+  clone.style.width = `${natW}px`
+  clone.style.height = `${natH}px`
+  clone.style.maxWidth = 'none'
+  clone.style.maxHeight = 'none'
+  clone.style.transform = `scale(${scale})`
+  clone.style.transformOrigin = 'top left'
+  clone.style.display = 'block'
+
+  svgBox.width = `${Math.round(natW * scale)}px`
+  svgBox.height = `${Math.round(natH * scale)}px`
   mode.value = 'svg'
-  svgHtml.value = svg.outerHTML
+  svgHtml.value = clone.outerHTML
   show()
 }
 
@@ -71,7 +121,7 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', onDocClick)
   document.removeEventListener('keydown', onKey)
-  document.documentElement.style.overflow = ''
+  if (open.value) unlockScroll()
 })
 </script>
 
@@ -91,7 +141,12 @@ onUnmounted(() => {
         </button>
         <img v-if="mode === 'img'" class="lb-content" :src="imgSrc" :alt="imgAlt" />
         <!-- svgHtml is our own Mermaid output (trusted, not user input) -->
-        <div v-else class="lb-content lb-svg" v-html="svgHtml"></div>
+        <div
+          v-else
+          class="lb-content lb-svg"
+          :style="{ width: svgBox.width, height: svgBox.height }"
+          v-html="svgHtml"
+        ></div>
       </div>
     </Transition>
   </Teleport>
@@ -118,16 +173,15 @@ onUnmounted(() => {
   border-radius: 8px;
 }
 .lb-svg {
-  display: flex;
   background: var(--vp-c-bg);
-  padding: 1.5rem 2rem;
-  overflow: auto;
+  overflow: visible;
 }
 .lb-svg :deep(svg) {
-  width: auto;
-  height: auto;
-  max-width: 88vw;
-  max-height: 86vh;
+  display: block;
+  overflow: visible;
+}
+.lb-svg :deep(foreignObject) {
+  overflow: visible;
 }
 .lb-close {
   position: fixed;

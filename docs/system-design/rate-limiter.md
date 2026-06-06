@@ -21,7 +21,7 @@ status: solid
 > Clients hit the Rate Limiter sitting at the API gateway; allowed traffic flows through to upstream services; limit configuration is managed externally.
 
 ```mermaid
-flowchart LR
+flowchart TB
   client([Client])
   upstream([Upstream Services])
   cfgsrc([Config Source])
@@ -39,7 +39,7 @@ The Rate Limiter is the sole choke-point between external clients and internal s
 > The deployable units inside the Rate Limiter system and how they communicate.
 
 ```mermaid
-flowchart LR
+flowchart TB
   client([Client])
   upstream([Upstream Services])
 
@@ -68,7 +68,7 @@ flowchart LR
 > Components inside the Limiter Middleware and their responsibilities.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph Middleware [Limiter Middleware]
     kr[Key Resolver]
     algo[Token Bucket Engine]

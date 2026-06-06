@@ -21,7 +21,7 @@ status: review
 > A user or browser sends a create or redirect request to the URL Shortener, which optionally pushes click events to an analytics sink.
 
 ```mermaid
-flowchart LR
+flowchart TB
   user([User or Browser])
   analytics([Analytics Sink])
 
@@ -37,7 +37,7 @@ The URL Shortener is the single system; it is the only component that talks to e
 > The deployable units and their communication paths.
 
 ```mermaid
-flowchart LR
+flowchart TB
   user([User or Browser])
   analyticsink([Analytics Sink])
 
@@ -71,7 +71,7 @@ flowchart LR
 > Components inside the API and Web Service.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph API [API and Web Service]
     ch[Create Handler]
     enc[Base62 Encoder or Key Allocator]

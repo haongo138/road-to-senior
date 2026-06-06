@@ -21,7 +21,7 @@ status: review
 > The entire Payment System is one box; this shows who and what it talks to.
 
 ```mermaid
-flowchart LR
+flowchart TB
   buyer([Buyer])
   merchant([Merchant])
   psp[PSP / Card Network\nStripe / Adyen]
@@ -45,7 +45,7 @@ The Payment System owns the full lifecycle of a money movement. The PSP / Card N
 > Deployable units inside the Payment System and how they communicate.
 
 ```mermaid
-flowchart LR
+flowchart TB
   buyer([Buyer])
   merchant([Merchant])
   psp[PSP / Card Network]
@@ -93,7 +93,7 @@ flowchart LR
 > Zoom into the most critical container.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph Payment System
     subgraph Orchestration Service
       idem[Idempotency\nCheck]

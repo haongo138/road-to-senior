@@ -14,7 +14,7 @@ images, and CD is a pull-based reconciliation loop that keeps the cluster matchi
 ## The flow
 
 ```mermaid
-flowchart LR
+flowchart TB
   dev([Push / merge to main]) --> gha
 
   subgraph CI [GitHub Actions]

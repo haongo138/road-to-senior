@@ -21,7 +21,7 @@ status: review
 > The entire Realtime Chat system as one box; actors and external systems only.
 
 ```mermaid
-flowchart LR
+flowchart TB
   user([Mobile or Web User])
   push([APNs / FCM])
   media([Object Store CDN])
@@ -40,7 +40,7 @@ The Realtime Chat System owns connection management, message routing, persistenc
 > Deployable units inside the Realtime Chat System.
 
 ```mermaid
-flowchart LR
+flowchart TB
   user([User])
   push([APNs or FCM])
 
@@ -82,7 +82,7 @@ flowchart LR
 > Internal components of the connection gateway, the most complex container.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph Gateway [WS Gateway]
     connmgr[Connection Manager]
     auth[Auth and Handshake]

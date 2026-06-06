@@ -30,13 +30,9 @@ flowchart TD
     UF["Union-Find"]
     TSP["Topological Sort\n& Shortest Paths"]
 
-    Tree --> BT
-    Tree --> DP
-    Tree --> DC
-    Tree --> G
-    HM --> PS
-    HM --> STR
-    SW --> TP
+    Tree --> BT --> DP --> DC --> G --> PS --> STR --> SW --> TP --> HS --> BS --> BONUS
+    HM -.->|supports| PS
+    HM -.->|supports| STR
     BONUS --> DA
     BONUS --> TR
     BONUS --> UF
