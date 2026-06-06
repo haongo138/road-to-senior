@@ -52,6 +52,7 @@ Interviewers test whether you understand *why* systems are designed the way they
 - [SOLID & OOP](./solid-and-oop)
 - [Cohesion & Coupling](./cohesion-coupling)
 - [Composition over Inheritance](./composition-over-inheritance)
+- [Design Patterns](./design-patterns)
 
 ## Go (Golang) · Concurrency
 

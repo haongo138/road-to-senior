@@ -150,6 +150,7 @@ export default withMermaid({
             { text: 'SOLID & OOP', link: '/technical/concepts/solid-and-oop' },
             { text: 'Cohesion & Coupling', link: '/technical/concepts/cohesion-coupling' },
             { text: 'Composition over Inheritance', link: '/technical/concepts/composition-over-inheritance' },
+            { text: 'Design Patterns', link: '/technical/concepts/design-patterns' },
           ],
         },
         {
