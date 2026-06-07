@@ -18,6 +18,7 @@ export default withMermaid({
         ],
       },
       { text: 'Behavioral', link: '/behavioral/' },
+      { text: 'AI', link: '/ai/' },
       { text: 'Tools', link: '/tools/' },
       { text: 'Notes', link: '/notes/' },
       { text: 'Tags', link: '/tags' },
@@ -233,6 +234,15 @@ export default withMermaid({
           items: [
             { text: 'Overview', link: '/notes/' },
             { text: 'How I use this site', link: '/notes/welcome' },
+          ],
+        },
+      ],
+      '/ai/': [
+        {
+          text: 'AI',
+          items: [
+            { text: 'Overview', link: '/ai/' },
+            { text: 'Building Effective AI Agents', link: '/ai/building-effective-agents' },
           ],
         },
       ],
