@@ -59,6 +59,24 @@ is Rust-specific or you're genuinely fluent.
   with fearless concurrency and memory safety without a runtime. Trade-offs: a steep learning
   curve, slower iteration, and a smaller — but fast-growing — ecosystem.
 
+## Community & ecosystem
+
+- **Go** — stewarded by Google with an open proposal process; pragmatic, tooling-first culture
+  (`gofmt`, modules, and a famously stable standard library). Huge in the cloud-native world —
+  Docker, Kubernetes, Terraform, and most CNCF projects are Go. Friendly to newcomers and
+  strong on backward compatibility (the Go 1 promise). Trade-off: a deliberately conservative
+  community that resists big language changes, so features land slowly.
+- **Java** — the largest, most mature community of the three, governed via the JCP with multiple
+  vendors (Oracle, Eclipse Adoptium, Amazon Corretto, Azul). Three decades of libraries, the
+  Maven Central ecosystem, and frameworks like Spring mean an answer exists for almost anything.
+  Easiest to hire for and richest in books, courses, and Q&A. Trade-off: fragmentation across
+  JDK vendors/versions and a slower-moving enterprise culture.
+- **Rust** — community-governed by the Rust Foundation with active RFC and working-group
+  processes; consistently voted the "most loved" language in developer surveys. Excellent
+  official docs (*The Book*), a high-quality crates.io ecosystem, and a welcoming, inclusive
+  reputation. Now backed by Microsoft, Google, AWS, and the Linux kernel. Trade-off: younger and
+  smaller, so the talent pool is shallower and some niches still lack mature libraries.
+
 ## Common follow-ups
 
 - How would your choice change for a *systems* interview vs an *algorithms* interview?
