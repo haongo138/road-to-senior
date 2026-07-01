@@ -30,14 +30,14 @@ Fill in your own story:
 - No measurable adoption or outcome — says you pushed for something but can't show it landed.
 - Steamrolling dissent rather than addressing it — interviewers look for genuine consensus, not compliance under pressure.
 
-::: details Example (generic — replace with your own)
-**Situation:** Three backend teams were each maintaining separate logging libraries with incompatible formats, making cross-service debugging painful. I was an individual contributor on one of the teams — I had no authority over the other two.
+::: details Example — Getting teams to adopt a resilience standard (adapt to your own experience)
+**Situation:** After a slow dependency froze our maintenance service, I realized several services made cross-service calls with no timeout or circuit breaker — any one slow dependency could cascade and take down healthy services. I was an individual contributor on one team with no authority over the others.
 
-**Task:** I wanted all three teams to converge on a single shared logging standard before a new observability platform was rolled out, giving us maybe six weeks before the window closed.
+**Task:** I wanted the backend teams to converge on a shared resilience standard — timeouts plus circuit breakers on critical cross-service calls — before we scaled up to bigger sessions.
 
-**Action:** I started by prototyping the proposed standard in my own team's service and capturing concrete before/after metrics: mean time to find a correlated trace dropped from 12 minutes to 3. I then identified one engineer on each of the other two teams who'd complained loudest about the debugging pain — I treated them as co-authors, not recipients, inviting them to critique and improve the spec. I ran a 45-minute cross-team demo showing the working prototype and the data. When one team raised a concern about migration cost, I offered to pair with them for one day to do the migration together.
+**Action:** I prototyped the pattern in my own service first and captured concrete before/after numbers: a simulated slow dependency that used to freeze the service now failed fast and stayed contained. I identified one engineer on each of the other teams who'd been burned by cascading failures and treated them as co-authors, inviting them to critique and improve the approach. I ran a short cross-team demo with the data, and when one team worried about migration effort, I offered to pair for a day to wire it in.
 
-**Result:** All three teams adopted the standard within five weeks. Within two months of the observability rollout, on-call incident resolution time was down 25% across services. The spec was later formalized as an engineering guideline.
+**Result:** The teams adopted the standard within a few weeks, and it was later formalized as an engineering guideline. Slow dependencies stopped being able to take down whole services.
 
-**Learned:** I learned to involve the loudest skeptics as co-authors early — it converts opposition into ownership. Now whenever I'm driving a cross-team standard, I identify two or three people who feel the pain most and make them collaborators before I write a single line of the proposal.
+**Learned:** Involving the loudest skeptics as co-authors early converts opposition into ownership. Now whenever I drive a cross-team standard, I make the two or three people who feel the pain most into collaborators before I write a line of the proposal.
 :::

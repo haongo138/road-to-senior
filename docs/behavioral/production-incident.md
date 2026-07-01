@@ -30,14 +30,14 @@ Fill in your own story:
 - No communication to stakeholders during the incident: silence is never the right answer when production is down.
 - No postmortem or prevention: "we fixed it and moved on" signals the same incident will happen again.
 
-::: details Example (generic — replace with your own)
-**Situation:** On a Tuesday afternoon, our primary API started returning 503s. An automated alert fired and customer support began receiving tickets within minutes. The service handled order processing for a retail client and roughly 2,000 requests per minute were failing.
+::: details Example — A silent logging issue that took down the claim service (adapt to your own experience)
+**Situation:** During a live streamed session, the claim service started returning 503s the moment the game ended and the audience rushed to claim. An alert fired — but oddly, our logs and dashboards had gone quiet, showing almost nothing right when we needed them most.
 
-**Task:** I was the on-call engineer. I joined the incident channel and took the lead on response.
+**Task:** I was the on-call engineer and took the lead on the incident — with the streamer live, every minute was visible.
 
-**Action:** My first move was mitigation, not diagnosis. I checked the recent deploy history — there had been a deploy 40 minutes earlier — and rolled it back immediately without waiting to confirm it was the cause. Within three minutes of rollback the error rate dropped to zero. Only then did I post an update to the stakeholder channel: "Service restored, rollback applied, investigating root cause." I set a 15-minute cadence for updates. Root-cause analysis showed the deploy had introduced a missing database index on a query that runs on every request — fine in staging with small data, catastrophic at production load. I wrote a postmortem that afternoon: blameless, five contributing factors, three action items.
+**Action:** Mitigation first, not diagnosis. Since the logs themselves had gone silent, I treated the silence as the clue and checked the host directly — the disk was full. Under the claim rush we were writing a verbose log line for every claim, synchronously; the volume filled the disk and saturated I/O, which blocked request threads and caused the 503s. And because the disk was full, the service could no longer write logs — so the very problem hid itself, which is why the dashboards looked empty. I freed space and dropped logging to async at a reduced level to restore service, then posted a stakeholder update ("service recovering, funds are safe") on a 15-minute cadence.
 
-**Result:** The outage lasted nine minutes. The rollback resolved the customer impact. The postmortem action items were: add a query-performance check to CI that runs against a production-size snapshot, add a p99 latency alert (we had only an error-rate alert), and add the missing index as a follow-up migration. All three shipped within one week.
+**Result:** Failures stopped within minutes and claims settled normally. Postmortem action items: move hot-path logging to async and sample it, add a disk-space and log-volume alert (we'd only had an error-rate alert), and add log rotation with sane retention. All three shipped within a week.
 
-**Learned:** I internalized the mitigation-first principle: my job during an active incident is to stop user impact as fast as possible, not to understand why it happened. Root-cause is important but it belongs after the bleeding stops. I also learned that deploy history is always the first thing to check — the correlation between a recent deploy and a new problem is strong enough that rollback-first is almost always the right opening move.
+**Learned:** During an active incident my job is to stop user impact fast, not to understand why — root cause belongs after the bleeding stops. The sharper lesson: when your logs go silent under load, the *absence* of signal is itself the signal. Logging on a hot path is a real dependency with real cost, and monitoring that can't survive the incident it's meant to catch is a gap worth closing.
 :::

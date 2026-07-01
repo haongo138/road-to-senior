@@ -227,6 +227,13 @@ export default withMermaid({
             { text: 'Production Incident / Outage', link: '/behavioral/production-incident' },
           ],
         },
+        {
+          text: 'Questions · Engineering Judgment',
+          collapsed: true,
+          items: [
+            { text: 'Using AI in Engineering', link: '/behavioral/using-ai-in-engineering' },
+          ],
+        },
       ],
       '/notes/': [
         {
@@ -280,6 +287,168 @@ export default withMermaid({
           ],
         },
       ],
+    },
+  },
+  locales: {
+    root: { label: 'English', lang: 'en-US' },
+    vi: {
+      label: 'Tiếng Việt',
+      lang: 'vi',
+      link: '/vi/',
+      themeConfig: {
+        nav: [
+          { text: 'System Design', link: '/system-design/' },
+          {
+            text: 'Technical',
+            items: [
+              { text: 'Problem Solving', link: '/technical/problem-solving/dsa-roadmap' },
+              { text: 'Tech Concepts', link: '/vi/technical/concepts/concepts' },
+            ],
+          },
+          { text: 'Behavioral', link: '/vi/behavioral/' },
+          { text: 'AI', link: '/ai/' },
+          { text: 'Tools', link: '/tools/' },
+          { text: 'Notes', link: '/notes/' },
+          { text: 'Tags', link: '/tags' },
+        ],
+        sidebar: {
+          '/vi/behavioral/': [
+            {
+              text: 'Behavioral',
+              items: [
+                { text: 'Tổng quan', link: '/vi/behavioral/' },
+                { text: 'Phương pháp STAR-L (EN)', link: '/vi/behavioral/star-method' },
+              ],
+            },
+            {
+              text: 'Câu hỏi · Cốt lõi',
+              items: [
+                { text: 'Xung đột với đồng đội', link: '/vi/behavioral/conflict-with-teammate' },
+                { text: 'Vấn đề kỹ thuật khó nhất', link: '/vi/behavioral/hardest-technical-problem' },
+                { text: 'Một thất bại hoặc sai lầm', link: '/vi/behavioral/failure-or-mistake' },
+                { text: 'Bất đồng với quản lý', link: '/vi/behavioral/disagreed-with-manager' },
+                { text: 'Dẫn dắt một dự án', link: '/vi/behavioral/led-a-project' },
+              ],
+            },
+            {
+              text: 'Câu hỏi · Ảnh hưởng & Hợp tác',
+              collapsed: true,
+              items: [
+                { text: 'Gây ảnh hưởng không cần quyền hạn', link: '/vi/behavioral/influence-without-authority' },
+                { text: 'Phản hồi khó khăn', link: '/vi/behavioral/difficult-feedback' },
+                { text: 'Cố vấn cho ai đó', link: '/vi/behavioral/mentoring' },
+              ],
+            },
+            {
+              text: 'Câu hỏi · Thực thi & Trách nhiệm',
+              collapsed: true,
+              items: [
+                { text: 'Deadline gấp / Ưu tiên xung đột', link: '/vi/behavioral/tight-deadline-priorities' },
+                { text: 'Làm chủ vấn đề mơ hồ', link: '/vi/behavioral/ambiguous-ownership' },
+                { text: 'Sự cố / Downtime production', link: '/vi/behavioral/production-incident' },
+              ],
+            },
+            {
+              text: 'Câu hỏi · Tư duy kỹ thuật',
+              collapsed: true,
+              items: [
+                { text: 'Dùng AI trong kỹ thuật', link: '/vi/behavioral/using-ai-in-engineering' },
+              ],
+            },
+          ],
+          '/vi/technical/concepts/': [
+            {
+              text: 'Khái niệm kỹ thuật',
+              items: [
+                { text: 'Tổng quan', link: '/vi/technical/concepts/concepts' },
+                { text: '↩ Technical home (EN)', link: '/technical/' },
+              ],
+            },
+            {
+              text: 'Đồng thời & Độ tin cậy',
+              items: [
+                { text: 'Transactional Outbox', link: '/vi/technical/concepts/outbox' },
+                { text: 'Saga Pattern', link: '/vi/technical/concepts/saga' },
+                { text: 'Two-Phase Commit', link: '/vi/technical/concepts/two-phase-commit' },
+                { text: 'Change Data Capture', link: '/vi/technical/concepts/change-data-capture' },
+                { text: 'Idempotency Keys', link: '/vi/technical/concepts/idempotency' },
+              ],
+            },
+            {
+              text: 'Cơ sở dữ liệu',
+              items: [
+                { text: 'Database Indexing', link: '/vi/technical/concepts/db-indexing' },
+                { text: 'Transactions & Isolation', link: '/vi/technical/concepts/transactions-isolation' },
+                { text: 'Normalization', link: '/vi/technical/concepts/normalization' },
+                { text: 'Sharding & Replication', link: '/vi/technical/concepts/sharding-replication' },
+                { text: 'SQL vs NoSQL', link: '/vi/technical/concepts/sql-vs-nosql' },
+              ],
+            },
+            {
+              text: 'Caching',
+              items: [
+                { text: 'Cache Strategies', link: '/vi/technical/concepts/cache-strategies' },
+                { text: 'Cache Invalidation & Eviction', link: '/vi/technical/concepts/cache-invalidation' },
+              ],
+            },
+            {
+              text: 'Messaging & Tính nhất quán',
+              items: [
+                { text: 'Queues vs Streams', link: '/vi/technical/concepts/queues-vs-streams' },
+                { text: 'Delivery Semantics', link: '/vi/technical/concepts/delivery-semantics' },
+                { text: 'CAP Theorem', link: '/vi/technical/concepts/cap-theorem' },
+                { text: 'Eventual Consistency', link: '/vi/technical/concepts/eventual-consistency' },
+              ],
+            },
+            {
+              text: 'Auth & Tokens',
+              collapsed: true,
+              items: [
+                { text: 'JSON Web Tokens (JWT)', link: '/vi/technical/concepts/jwt' },
+                { text: 'OAuth 2.0', link: '/vi/technical/concepts/oauth2' },
+                { text: 'OpenID Connect (OIDC)', link: '/vi/technical/concepts/openid-connect' },
+                { text: 'Access & Refresh Tokens', link: '/vi/technical/concepts/access-refresh-tokens' },
+              ],
+            },
+            {
+              text: 'OOP & Thiết kế',
+              collapsed: true,
+              items: [
+                { text: 'SOLID & OOP', link: '/vi/technical/concepts/solid-and-oop' },
+                { text: 'Cohesion & Coupling', link: '/vi/technical/concepts/cohesion-coupling' },
+                { text: 'Composition over Inheritance', link: '/vi/technical/concepts/composition-over-inheritance' },
+                { text: 'Design Patterns', link: '/vi/technical/concepts/design-patterns' },
+              ],
+            },
+            {
+              text: 'Go (Golang) · Concurrency',
+              collapsed: true,
+              items: [
+                { text: 'Goroutines & the Scheduler', link: '/vi/technical/concepts/go-goroutines-scheduler' },
+                { text: 'Channels & select', link: '/vi/technical/concepts/go-channels-select' },
+                { text: 'context.Context', link: '/vi/technical/concepts/go-context' },
+                { text: 'sync Primitives', link: '/vi/technical/concepts/go-sync-primitives' },
+                { text: 'Channels vs Mutexes', link: '/vi/technical/concepts/go-channels-vs-mutexes' },
+                { text: 'Data Races & Memory Model', link: '/vi/technical/concepts/go-data-races' },
+                { text: 'Concurrency Patterns', link: '/vi/technical/concepts/go-concurrency-patterns' },
+                { text: 'Goroutine Leaks', link: '/vi/technical/concepts/go-goroutine-leaks' },
+              ],
+            },
+            {
+              text: 'Go (Golang) · Runtime & Semantics',
+              collapsed: true,
+              items: [
+                { text: 'GC & Escape Analysis', link: '/vi/technical/concepts/go-gc-escape-analysis' },
+                { text: 'Interfaces & nil gotcha', link: '/vi/technical/concepts/go-interfaces' },
+                { text: 'Slices & Maps Internals', link: '/vi/technical/concepts/go-slices-maps' },
+                { text: 'defer, panic, recover', link: '/vi/technical/concepts/go-defer-panic-recover' },
+                { text: 'Error Handling', link: '/vi/technical/concepts/go-error-handling' },
+                { text: 'Generics', link: '/vi/technical/concepts/go-generics' },
+              ],
+            },
+          ],
+        },
+      },
     },
   },
   mermaid: {

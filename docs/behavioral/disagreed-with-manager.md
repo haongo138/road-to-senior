@@ -30,14 +30,14 @@ Fill in your own story:
 - Refusing to commit after the decision was made — "disagree and drag" is a red flag.
 - Opinion with no data — "I just felt it was wrong" is not a good push-back story.
 
-::: details Example (generic — replace with your own)
-**Situation:** My manager wanted to ship a new API endpoint in two weeks to meet a partner's deadline. Based on the scope of the work and our current sprint load, I believed four weeks was more realistic.
+::: details Example — Pushing to load-test the claim rush before launch (adapt to your own experience)
+**Situation:** My manager wanted to ship the reward-claim feature in two weeks to hit a streamer's scheduled launch. Given the risk — a whole audience claiming at once against a fixed-balance vault — I believed we needed load testing and a reconciliation safety net first, which pushed it closer to four weeks.
 
-**Task:** I was the tech lead responsible for the delivery estimate and the team's execution. I needed to either accept the timeline or make a compelling case for a revision.
+**Task:** I owned the claim delivery and its reliability. I had to either accept the timeline or make a compelling case for changing it.
 
-**Action:** Instead of saying "that's not enough time," I prepared a written breakdown: a task list with hour estimates, current team velocity, and two risks that could slip even the four-week estimate. I shared it with my manager in a 1:1 and proposed two alternatives — descope the endpoint to an MVP for two weeks, or negotiate with the partner for four. He heard me out and decided to keep the two-week date because the partner relationship was strategic. I said I'd do my best and immediately refocused the team on the MVP scope we could realistically ship.
+**Action:** Instead of "that's not enough time," I wrote a short breakdown: the claim-rush traffic shape, what could fail (vault over-draw, double-claims, service overload), and two options — ship a descoped MVP in two weeks with a hard cap on concurrent claims, or take four weeks for the full flow with k6 load-test gating. I shared it in a 1:1 and proposed both. He kept the two-week date because the launch was strategic, so I refocused the team on the safe MVP and got the load testing in right after.
 
-**Result:** We delivered a working MVP in 13 days. It wasn't the full feature, but the partner was satisfied. Three weeks later we shipped the complete version.
+**Result:** We shipped a capped MVP in 13 days that held up on stream, then added full k6 gating and reconciliation three weeks later. No claim incident during the launch.
 
-**Learned:** I learned that framing pushback as "here are the options and their tradeoffs" is far more effective than "that's not possible." The manager still has context I don't. Since then, when I disagree, I always come with data and at least one alternative — and once a decision is final, I commit fully, because half-hearted execution is worse than the original disagreement.
+**Learned:** Framing pushback as "here are the options and their tradeoffs" beats "that's not possible" — the manager has context I don't. I now bring data and at least one alternative, and once the call is final I commit fully, because half-hearted execution is worse than the original disagreement.
 :::

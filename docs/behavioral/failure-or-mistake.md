@@ -30,14 +30,14 @@ Fill in your own story:
 - No real lesson: "I learned to be more careful" is not a lesson.
 - Downplaying the impact to make yourself look better — honest acknowledgment of real impact is more impressive.
 
-::: details Example (generic — replace with your own)
-**Situation:** I was deploying a schema migration to a production database during a low-traffic window. The migration added a non-nullable column with a default value.
+::: details Example — Shipping the claim flow without idempotency (adapt to your own experience)
+**Situation:** I shipped the first version of the reward-claim flow for our blockchain game. It did a plain read-check-write on the vault allocation and marked claims settled on submit. I'd tested it, but never against a real claim rush.
 
-**Task:** I owned the migration plan and execution. I had tested it in staging but hadn't run it against a production-sized dataset.
+**Task:** I owned the claim flow. I'd validated it with a handful of test users, not with a live audience claiming at the same instant.
 
-**Action:** The migration locked the table for nine minutes — far longer than the 30-second estimate from staging — causing an outage for a key customer-facing endpoint. I immediately rolled back, communicated to the team, and posted an incident channel update within five minutes.
+**Action:** During the first big streamed session, hundreds of viewers claimed in the same few seconds. Concurrent claims read the same balance and a few players double-claimed, drawing the vault down wrong. I caught it from the mismatch alert, paused claims immediately, and posted an incident update within minutes. I reconciled against on-chain state to find exactly who was affected and corrected the ledger.
 
-**Result:** The outage lasted 11 minutes and affected roughly 3,000 users. We restored service by rolling back the deploy. I then wrote a post-mortem, identified three process gaps, and drove two changes: we added an explicit migration-duration test on a production-cloned dataset in CI, and we adopted an online schema change tool for all future table alterations.
+**Result:** A handful of double-payouts, contained within about 15 minutes and fixed by reconciliation. In the postmortem I drove three changes: idempotency keys per `(session_id, wallet_address)`, an atomic conditional update for the vault deduction, and a k6 load test of the claim rush gated in CI.
 
-**Learned:** I learned that testing at staging scale is not testing at production scale — they are qualitatively different. I now require every migration to be rehearsed on a production-size snapshot before scheduling a production window, and I no longer accept "it worked in staging" as sufficient evidence for anything touching large tables.
+**Learned:** Testing with a few users is not testing a thundering herd — they're qualitatively different. I now rehearse the worst realistic concurrency before shipping anything that moves balances, and I no longer accept "it worked with test users" for a money path.
 :::

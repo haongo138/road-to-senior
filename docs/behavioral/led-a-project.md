@@ -30,14 +30,14 @@ Fill in your own story:
 - No mention of obstacles — a project with no friction isn't a leadership story.
 - No result — "the project went well" is not an outcome.
 
-::: details Example (generic — replace with your own)
-**Situation:** Our team had accumulated three years of technical debt around a deprecated internal data pipeline. It was causing two to three incidents per month and blocking two other teams from building features that depended on reliable data delivery. No one had formal ownership of the migration.
+::: details Example — Leading the on-chain/off-chain consistency effort (adapt to your own experience)
+**Situation:** Our blockchain game had drift between the Postgres claim log and the on-chain vault — a few mismatches after most sessions. It eroded trust in our numbers and blocked us from scaling to bigger streamers. The fix crossed three groups — game backend, the contracts/indexer team, and infra — and no one had formal ownership.
 
-**Task:** I identified the risk in a quarterly planning meeting and volunteered to lead the migration to the new pipeline platform, coordinating across two backend teams and a data engineering team — while keeping my existing feature commitments.
+**Task:** I raised the risk in planning and volunteered to lead the consistency effort across those three groups, while keeping my own delivery commitments.
 
-**Action:** I started by writing a one-page migration proposal with a risk/effort breakdown and got buy-in from the three team leads in a single meeting. I broke the work into four phases, assigned phase ownership to individual engineers (not teams), and set up a weekly 30-minute sync to surface blockers early. When the data engineering team hit a dependency delay in phase two, I negotiated a temporary workaround directly with their lead so the other phases could continue in parallel. I sent a weekly written status update to all stakeholders so no one was surprised.
+**Action:** I started with a one-page proposal — the problem, a risk/effort breakdown, and the target design (chain as source of truth, confirm asynchronously, reconcile). I got buy-in from the three leads in a single meeting, broke the work into phases (idempotent claims, indexer confirmation, reconciliation job, alerting), and gave each phase to a named engineer, not a team. When the indexer work hit a delay, I negotiated a temporary manual reconciliation with their lead so the other phases kept moving, and I sent a short weekly written update so no one was surprised.
 
-**Result:** Migration completed in eight weeks — two ahead of the original estimate. The incident rate from pipeline issues dropped from three per month to zero over the following quarter. Both dependent teams shipped their features within four weeks of cutover.
+**Result:** Shipped in about eight weeks. Post-session mismatches went from routine to effectively zero, and we could onboard bigger sessions without manual checks.
 
-**Learned:** I learned that the hardest part of leading cross-team work isn't the technical coordination — it's keeping three teams aligned on *why* the work matters when they each have competing priorities. I now always write a brief "north star" document at the start of any cross-team effort and revisit it whenever momentum stalls.
+**Learned:** The hardest part of cross-team work isn't the coordination — it's keeping teams aligned on *why* it matters against competing priorities. I now write a brief "north star" at the start of any cross-team effort and revisit it whenever momentum stalls.
 :::

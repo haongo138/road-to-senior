@@ -30,14 +30,14 @@ Fill in your own story:
 - Scope confusion: not being able to articulate how you decided what was in scope vs. out of scope.
 - "It wasn't my job" framing: even if you eventually acted, signaling resentment about stepping outside your lane is a red flag.
 
-::: details Example (generic — replace with your own)
-**Situation:** Our CI pipeline had a persistent flakiness problem — roughly 15-20% of runs failed on a specific integration test suite with no consistent error. It had been logged as a known issue for four months. Three different teams touched the relevant code and no one owned the test infrastructure formally.
+::: details Example — Reconciliation mismatches nobody owned (adapt to your own experience)
+**Situation:** In our blockchain game, the Postgres claim log and the on-chain vault would occasionally disagree — a claim marked settled with no matching on-chain payout, or the reverse. It had been a known issue for weeks. It sat between two teams: the game backend owned Postgres, the contracts/indexer team owned the chain, and nobody formally owned the seam between them.
 
-**Task:** The flakiness was slowing down every team: engineers were re-running pipelines instead of investigating, and broken builds were masking real failures. No one was assigned to fix it, but I decided to take it on because the cost — in lost engineering time — was clearly high and I had some familiarity with the test framework.
+**Task:** The mismatches eroded trust in our numbers and forced manual checks after every big session. No one was assigned, but the cost was high and I understood both sides, so I took it on.
 
-**Action:** I first spent two days characterizing the problem before touching any code: I scraped four weeks of CI logs, tagged each failure by error type, and found that 80% of flakes traced to a single external service client that wasn't being properly reset between tests. I defined a narrow scope: fix the reset logic, add retry-with-jitter for the flaky service calls, and add a flakiness-detection job to the pipeline. I shared my diagnosis in a Slack thread, got a quick thumbs-up from the three affected teams, and opened a PR within a week.
+**Action:** I spent two days characterizing the problem before touching code: I pulled weeks of claim logs and on-chain events, tagged each mismatch by type, and found ~80% traced to claims we marked settled on submit rather than on confirmation. I scoped the fix narrowly — mark settled only when the indexer confirms, add a reconciliation job, and add a mismatch alert. I shared the diagnosis in a thread, got a quick thumbs-up from both teams, and opened a PR within a week.
 
-**Result:** Flakiness dropped from ~18% to under 2% within two weeks of merging. The new flakiness-detection job caught two regressions in the following month before they merged. Engineers on all three teams stopped treating re-runs as routine.
+**Result:** Mismatches dropped to near zero, the reconciliation job settled stragglers automatically, and the alert turned silent drift into a precise signal. Both teams stopped doing manual post-session checks.
 
-**Learned:** I learned that unowned problems usually stay unowned not because no one cares, but because it's unclear where to start. Spending time explicitly diagnosing and scoping the problem — before writing a line of code — is what made it tractable. I now look for high-cost unowned problems as a regular habit, not just when something is bothering me personally.
+**Learned:** Unowned problems stay unowned because it's unclear where to start, not because no one cares. Diagnosing and scoping *before* writing code is what made it tractable. I now watch for high-cost unowned problems at the seams between teams as a habit.
 :::

@@ -37,3 +37,7 @@ variations you can map onto a story you've already written.
 - [Tight Deadline / Competing Priorities](./tight-deadline-priorities)
 - [Owned an Ambiguous Problem](./ambiguous-ownership)
 - [Production Incident / Outage](./production-incident)
+
+## Engineering Judgment
+
+- [Using AI in Engineering](./using-ai-in-engineering)
