@@ -4,6 +4,7 @@ import '@fontsource-variable/dm-sans/index.css'
 import Layout from './Layout.vue'
 import CardGrid from './components/CardGrid.vue'
 import TagsPage from './components/TagsPage.vue'
+import RoadmapTree from './components/RoadmapTree.vue'
 import './custom.css'
 
 // --- Language persistence ------------------------------------------------
@@ -108,6 +109,7 @@ export default {
   enhanceApp({ app, router }) {
     app.component('CardGrid', CardGrid)
     app.component('TagsPage', TagsPage)
+    app.component('RoadmapTree', RoadmapTree)
 
     if (typeof window === 'undefined' || !router) return
 

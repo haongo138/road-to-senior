@@ -167,3 +167,192 @@ html {
 .rs-tags p {
   color: var(--vp-c-text-3);
 }
+
+/* ---- FDE roadmap tree (home) ---- */
+.rs-roadmap {
+  margin: 8px 0 40px;
+}
+.rs-roadmap__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.rs-roadmap__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin: 0 !important;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.rs-roadmap__count {
+  font-variant-numeric: tabular-nums;
+}
+.rs-roadmap__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--vp-c-text-3);
+  border-radius: 50%;
+}
+.rs-roadmap__dot--done {
+  background: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+.rs-roadmap__toggle {
+  padding: 4px 12px;
+  font-size: 13px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  color: var(--vp-c-text-1);
+  transition: border-color var(--rs-ease), color var(--rs-ease);
+}
+.rs-roadmap__toggle:hover,
+.rs-roadmap__toggle:focus-visible {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.vp-doc .rs-roadmap ol,
+.vp-doc .rs-roadmap ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vp-doc .rs-roadmap li + li {
+  margin-top: 0;
+}
+.rs-roadmap__stages {
+  border-left: 1px solid var(--vp-c-divider);
+  margin-left: 14px !important;
+}
+.rs-roadmap__stage {
+  position: relative;
+  padding: 0 0 4px 22px;
+}
+.vp-doc .rs-roadmap__summary {
+  margin: 0; /* VitePress gives .vp-doc summary 16px block margins */
+}
+.rs-roadmap__summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.rs-roadmap__summary::-webkit-details-marker {
+  display: none;
+}
+.rs-roadmap__summary:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.rs-roadmap__num {
+  position: absolute;
+  left: -14px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition: background var(--rs-ease), color var(--rs-ease), border-color var(--rs-ease);
+}
+details[open] > .rs-roadmap__summary .rs-roadmap__num,
+.rs-roadmap__summary:hover .rs-roadmap__num {
+  background: var(--vp-c-brand-3);
+  border-color: var(--vp-c-brand-3);
+  color: #fff;
+}
+.rs-roadmap__head {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 18px;
+}
+.rs-roadmap__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+}
+.rs-roadmap__desc {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+.rs-roadmap__meter {
+  flex: none;
+  padding-top: 2px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+  font-variant-numeric: tabular-nums;
+}
+.rs-roadmap__topics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px 24px;
+  padding: 4px 0 18px 18px !important;
+}
+.rs-roadmap__topic-title {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+}
+.rs-roadmap__items {
+  border-left: 1px solid var(--vp-c-divider);
+}
+.rs-roadmap__item {
+  position: relative;
+  padding: 3px 0 3px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.rs-roadmap__item::before {
+  content: '';
+  position: absolute;
+  left: -4.5px;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vp-c-bg);
+  border: 1.5px solid var(--vp-c-text-3);
+}
+.rs-roadmap__item:has(.rs-roadmap__leaf--done)::before {
+  background: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+.rs-roadmap__leaf {
+  color: var(--vp-c-text-2);
+}
+.vp-doc a.rs-roadmap__leaf--done {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  font-weight: 500;
+}
+.vp-doc a.rs-roadmap__leaf--done:hover {
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rs-roadmap__num,
+  .rs-roadmap__toggle {
+    transition: none;
+  }
+}

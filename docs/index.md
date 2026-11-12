@@ -1,13 +1,13 @@
 ---
 layout: home
 hero:
-  name: Road to Senior
-  text: Notes & patterns for the senior SWE interview
-  tagline: System design, technical patterns, and behavioral prep — one place to think like a senior.
+  name: Road to FDE
+  text: Notes & patterns for the Forward Deployed Engineer interview
+  tagline: System design, technical patterns, AI, and behavioral prep in one place, on the way to Forward Deployed Engineer.
   actions:
     - theme: brand
-      text: Start with System Design
-      link: /system-design/
+      text: See the Roadmap
+      link: '#roadmap'
     - theme: alt
       text: Browse Tags
       link: /tags
@@ -22,6 +22,12 @@ features:
     title: Behavioral Prep
     details: STAR stories, leadership principles, and prepared answers.
 ---
+
+## Roadmap
+
+Six stages from engineering foundations to the FDE interview loop. Open a stage to see its topics; filled dots link to notes that already exist.
+
+<RoadmapTree />
 
 ## Browse all notes
 
