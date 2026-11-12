@@ -1,8 +1,8 @@
 ---
 layout: home
 hero:
-  name: Road to Senior
-  text: Chuẩn bị phỏng vấn Senior SWE
+  name: Road to FDE
+  text: Chuẩn bị phỏng vấn Forward Deployed Engineer
   tagline: Hiện đã có bản tiếng Việt cho phần Behavioral. Các phần còn lại vẫn là bản tiếng Anh.
   actions:
     - theme: brand

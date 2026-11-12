@@ -1,6 +1,6 @@
-# Road to Senior
+# Road to FDE
 
-My notes & patterns (system design, technical, behavioral) on the way to passing the senior software engineer interview. Built with [VitePress](https://vitepress.dev), deployed to GitHub Pages at https://haongo138.github.io/road-to-senior/ .
+My notes & patterns (system design, technical, behavioral) on the way to passing the Forward Deployed Engineer (FDE) interview. Built with [VitePress](https://vitepress.dev), deployed to GitHub Pages at https://haongo138.github.io/road-to-senior/ .
 
 ## Local development
 

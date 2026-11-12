@@ -1,8 +1,8 @@
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid({
-  title: 'Road to Senior',
-  description: 'Notes & patterns on the way to passing the senior SWE interview',
+  title: 'Road to FDE',
+  description: 'Notes & patterns on the way to passing the Forward Deployed Engineer interview',
   base: '/road-to-senior/',
   cleanUrls: true,
   srcExclude: ['superpowers/**'],
