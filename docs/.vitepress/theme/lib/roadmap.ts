@@ -116,23 +116,23 @@ export const ROADMAP: RoadmapStage[] = [
       {
         title: 'LLM building blocks',
         items: [
-          { label: 'Tokens, context windows, cost & latency' },
-          { label: 'Prompt & context engineering' },
-          { label: 'RAG pipelines' },
+          { label: 'Tokens, context windows, cost & latency', link: '/ai/tokens-cost-latency' },
+          { label: 'Prompt & context engineering', link: '/ai/prompt-context-engineering' },
+          { label: 'RAG pipelines', link: '/ai/rag' },
         ],
       },
       {
         title: 'Agents',
         items: [
           { label: 'Building effective agents', link: '/ai/building-effective-agents' },
-          { label: 'Tool use & MCP servers' },
+          { label: 'Tool use & MCP servers', link: '/ai/tool-use-mcp' },
         ],
       },
       {
         title: 'Evals',
         items: [
-          { label: 'Golden datasets & regression suites' },
-          { label: 'Drift detection & failure tracking' },
+          { label: 'Golden datasets & regression suites', link: '/ai/eval-datasets' },
+          { label: 'Drift detection & failure tracking', link: '/ai/drift-detection' },
         ],
       },
     ],

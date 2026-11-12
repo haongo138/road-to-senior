@@ -250,6 +250,12 @@ export default withMermaid({
           items: [
             { text: 'Overview', link: '/ai/' },
             { text: 'Building Effective AI Agents', link: '/ai/building-effective-agents' },
+            { text: 'Tokens, Cost & Latency', link: '/ai/tokens-cost-latency' },
+            { text: 'Prompt & Context Engineering', link: '/ai/prompt-context-engineering' },
+            { text: 'RAG Pipelines', link: '/ai/rag' },
+            { text: 'Tool Use & MCP', link: '/ai/tool-use-mcp' },
+            { text: 'Golden Datasets & Evals', link: '/ai/eval-datasets' },
+            { text: 'Drift Detection', link: '/ai/drift-detection' },
           ],
         },
       ],
