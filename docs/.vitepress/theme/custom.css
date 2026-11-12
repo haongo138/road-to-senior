@@ -170,6 +170,7 @@ html {
 
 /* ---- FDE roadmap tree (home) ---- */
 .rs-roadmap {
+  --rs-line: var(--vp-c-border);
   margin: 8px 0 40px;
 }
 .rs-roadmap__bar {
@@ -225,16 +226,32 @@ html {
 .vp-doc .rs-roadmap li + li {
   margin-top: 0;
 }
+.vp-doc .rs-roadmap__summary {
+  margin: 0; /* VitePress gives .vp-doc summary 16px block margins */
+}
+
+/* Stage spine: one segment per stage, so it starts at the first circle and
+   stops at the last one instead of running past it. Circle center = 24px. */
 .rs-roadmap__stages {
-  border-left: 1px solid var(--vp-c-divider);
   margin-left: 14px !important;
 }
 .rs-roadmap__stage {
   position: relative;
   padding: 0 0 4px 22px;
 }
-.vp-doc .rs-roadmap__summary {
-  margin: 0; /* VitePress gives .vp-doc summary 16px block margins */
+.rs-roadmap__stage::before {
+  content: '';
+  position: absolute;
+  left: -0.5px;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid var(--rs-line);
+}
+.rs-roadmap__stage:first-child::before {
+  top: 24px;
+}
+.rs-roadmap__stage:last-child::before {
+  bottom: calc(100% - 24px);
 }
 .rs-roadmap__summary {
   display: flex;
@@ -255,14 +272,14 @@ html {
 .rs-roadmap__num {
   position: absolute;
   left: -14px;
-  flex: none;
+  z-index: 1;
   display: grid;
   place-items: center;
   width: 28px;
   height: 28px;
   border-radius: 50%;
   background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--rs-line);
   font-size: 13px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
@@ -299,47 +316,87 @@ details[open] > .rs-roadmap__summary .rs-roadmap__num,
   color: var(--vp-c-text-2);
   font-variant-numeric: tabular-nums;
 }
+
+/* Topic + item tree: each <li> draws its trunk (::before) and elbow (::after).
+   The last child's trunk stops at its own elbow, giving the closing corner. */
 .rs-roadmap__topics {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px 24px;
-  padding: 4px 0 18px 18px !important;
+  margin-left: 18px !important; /* trunk sits under the stage title */
+  padding-bottom: 8px !important;
+}
+.rs-roadmap__topic {
+  position: relative;
+  padding-left: 20px;
+}
+.rs-roadmap__item {
+  position: relative;
+  padding: 3px 0 3px 22px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.rs-roadmap__topic::before,
+.rs-roadmap__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid var(--rs-line);
+}
+.rs-roadmap__topic:first-child::before {
+  top: -8px; /* reach up to the stage summary */
+}
+.rs-roadmap__topic:last-child::before {
+  bottom: calc(100% - 14px);
+}
+.rs-roadmap__item:last-child::before {
+  bottom: calc(100% - 13px);
+}
+.rs-roadmap__topic::after,
+.rs-roadmap__item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  border-top: 1px solid var(--rs-line);
+}
+.rs-roadmap__topic::after {
+  top: 14px;
+  width: 14px;
+}
+.rs-roadmap__item::after {
+  top: 13px;
+  width: 9px;
 }
 .rs-roadmap__topic-title {
   display: block;
-  margin-bottom: 6px;
+  padding: 4px 0;
   font-size: 12px;
+  line-height: 20px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--vp-c-text-2);
 }
 .rs-roadmap__items {
-  border-left: 1px solid var(--vp-c-divider);
+  padding-bottom: 10px !important;
 }
-.rs-roadmap__item {
-  position: relative;
-  padding: 3px 0 3px 16px;
-  font-size: 14px;
-  line-height: 20px;
+.rs-roadmap__leaf {
+  color: var(--vp-c-text-2);
 }
-.rs-roadmap__item::before {
+.rs-roadmap__leaf::before {
   content: '';
   position: absolute;
-  left: -4.5px;
+  left: 8px;
   top: 9px;
+  box-sizing: border-box;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--vp-c-bg);
   border: 1.5px solid var(--vp-c-text-3);
 }
-.rs-roadmap__item:has(.rs-roadmap__leaf--done)::before {
+.rs-roadmap__leaf--done::before {
   background: var(--vp-c-brand-1);
   border-color: var(--vp-c-brand-1);
-}
-.rs-roadmap__leaf {
-  color: var(--vp-c-text-2);
 }
 .vp-doc a.rs-roadmap__leaf--done {
   color: var(--vp-c-text-1);
