@@ -204,19 +204,6 @@ html {
   background: var(--vp-c-brand-1);
   border-color: var(--vp-c-brand-1);
 }
-.rs-roadmap__toggle {
-  padding: 4px 12px;
-  font-size: 13px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 999px;
-  color: var(--vp-c-text-1);
-  transition: border-color var(--rs-ease), color var(--rs-ease);
-}
-.rs-roadmap__toggle:hover,
-.rs-roadmap__toggle:focus-visible {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
 .vp-doc .rs-roadmap ol,
 .vp-doc .rs-roadmap ul {
   list-style: none;
@@ -407,9 +394,21 @@ details[open] > .rs-roadmap__summary .rs-roadmap__num,
   color: var(--vp-c-brand-1);
   text-decoration: underline;
 }
+.rs-roadmap__chevron {
+  flex: none;
+  margin-top: 3px;
+  color: var(--vp-c-text-2);
+  transition: transform var(--rs-ease), color var(--rs-ease);
+}
+.rs-roadmap__summary:hover .rs-roadmap__chevron {
+  color: var(--vp-c-brand-1);
+}
+details[open] > .rs-roadmap__summary .rs-roadmap__chevron {
+  transform: rotate(180deg);
+}
 @media (prefers-reduced-motion: reduce) {
   .rs-roadmap__num,
-  .rs-roadmap__toggle {
+  .rs-roadmap__chevron {
     transition: none;
   }
 }

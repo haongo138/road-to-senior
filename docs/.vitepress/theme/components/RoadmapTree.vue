@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { withBase } from 'vitepress'
 import { ROADMAP, stageCoverage, totalCoverage } from '../lib/roadmap'
 
-// Native <details> handles keyboard + a11y; we only mirror its open state so
-// "expand all / collapse all" can drive it.
-const open = ref<boolean[]>(ROADMAP.map((_, i) => i === 0))
+// Accordion: native <details> handles keyboard + a11y; we track the one open
+// stage so opening another closes the previous.
+const openIndex = ref<number | null>(0)
 const total = totalCoverage(ROADMAP)
-const allOpen = computed(() => open.value.every(Boolean))
-
-function setAll(value: boolean) {
-  open.value = ROADMAP.map(() => value)
-}
 
 function onToggle(i: number, e: Event) {
   const isOpen = (e.target as HTMLDetailsElement).open
-  if (open.value[i] !== isOpen) open.value = open.value.map((v, j) => (j === i ? isOpen : v))
+  if (isOpen) openIndex.value = i
+  else if (openIndex.value === i) openIndex.value = null
 }
 </script>
 
@@ -27,14 +23,11 @@ function onToggle(i: number, e: Event) {
         <span class="rs-roadmap__dot" /> planned
         <span class="rs-roadmap__count">{{ total.covered }}/{{ total.total }} covered</span>
       </p>
-      <button type="button" class="rs-roadmap__toggle" @click="setAll(!allOpen)">
-        {{ allOpen ? 'Collapse all' : 'Expand all' }}
-      </button>
     </div>
 
     <ol class="rs-roadmap__stages">
       <li v-for="(stage, i) in ROADMAP" :key="stage.title" class="rs-roadmap__stage">
-        <details :open="open[i]" @toggle="onToggle(i, $event)">
+        <details :open="openIndex === i" @toggle="onToggle(i, $event)">
           <summary class="rs-roadmap__summary">
             <span class="rs-roadmap__num">{{ i + 1 }}</span>
             <span class="rs-roadmap__head">
@@ -44,6 +37,9 @@ function onToggle(i: number, e: Event) {
             <span class="rs-roadmap__meter">
               {{ stageCoverage(stage).covered }}/{{ stageCoverage(stage).total }}
             </span>
+            <svg class="rs-roadmap__chevron" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
           </summary>
 
           <ul class="rs-roadmap__topics">
